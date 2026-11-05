@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { CalendarBlank, PaperPlaneTilt, CheckCircle, Sparkle, ArrowSquareOut } from '@phosphor-icons/react';
+import React, { useState, useEffect } from 'react';
+import { CalendarBlank, PaperPlaneTilt, CheckCircle, Sparkle, ArrowSquareOut, EnvelopeSimple, CircleNotch } from '@phosphor-icons/react';
+import { submitToSabiInbox, TARGET_INBOX_EMAIL } from '../services/mailService';
 
 interface ContactPageProps {
   preselectedTrack?: string;
 }
 
-export const ContactPage: React.FC<ContactPageProps> = () => {
+export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) => {
   const [activeTab, setActiveTab] = useState<'calendly' | 'form'>('calendly');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [mailtoUrl, setMailtoUrl] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,6 +21,13 @@ export const ContactPage: React.FC<ContactPageProps> = () => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (preselectedTrack) {
+      // If a track or diagnosis was preselected, switch directly to the direct form tab so the user sees it immediately
+      setActiveTab('form');
+    }
+  }, [preselectedTrack]);
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -39,14 +49,37 @@ export const ContactPage: React.FC<ContactPageProps> = () => {
     return errs;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       return;
     }
-    setSubmitted(true);
+
+    setIsSubmitting(true);
+    try {
+      const result = await submitToSabiInbox({
+        formType: 'Full Diagnostic Inquiry Form',
+        subject: `[Sabi COO Inquiry] New Diagnostic Dossier: ${formData.name} (${formData.businessName})`,
+        senderName: formData.name,
+        senderEmail: formData.email,
+        fields: {
+          'Full Name': formData.name,
+          'Work Email': formData.email,
+          'WhatsApp / Phone': formData.phone,
+          'Company / Venture Name': formData.businessName,
+          'Current Revenue Stage': formData.currentRevenue,
+          'Primary Bottleneck / Scope': formData.businessDescription,
+          'Selected Engagement Track / Diagnosis': preselectedTrack || 'General Diagnostic Consultation',
+          'Target Recipient': TARGET_INBOX_EMAIL,
+        }
+      });
+      setMailtoUrl(result.mailtoFallbackUrl);
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -152,9 +185,23 @@ export const ContactPage: React.FC<ContactPageProps> = () => {
                       Submit Your Operational Dossier
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-600 mt-1 font-semibold">
-                      We respond directly via email/WhatsApp with initial notes within 24 hours.
+                      Responses are routed directly to our senior operating team at <strong className="text-[#021347] font-bold">info@sabicoo.com</strong> for review within 24 hours.
                     </p>
                   </div>
+
+                  {preselectedTrack && (
+                    <div className="p-3.5 rounded-2xl bg-blue-50/80 border border-blue-200 flex items-start gap-3">
+                      <Sparkle className="w-5 h-5 text-[#1896FA] shrink-0 mt-0.5" weight="fill" />
+                      <div>
+                        <div className="text-[11px] font-mono font-bold text-[#1896FA] uppercase tracking-wider">
+                          Attached Track / Diagnostic Result
+                        </div>
+                        <div className="text-sm font-bold text-[#021347] mt-0.5">
+                          {preselectedTrack}
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -261,9 +308,17 @@ export const ContactPage: React.FC<ContactPageProps> = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-4 bg-[#0A0F1D] hover:bg-[#1896FA] text-white font-bold text-sm rounded-full transition-all cursor-pointer shadow-lg active:scale-98"
+                    disabled={isSubmitting}
+                    className="w-full py-4 bg-[#0A0F1D] hover:bg-[#1896FA] disabled:bg-slate-400 text-white font-bold text-sm rounded-full transition-all cursor-pointer shadow-lg active:scale-98 flex items-center justify-center gap-2"
                   >
-                    Submit Scoping Request
+                    {isSubmitting ? (
+                      <>
+                        <CircleNotch className="w-5 h-5 animate-spin" weight="bold" />
+                        <span>Transmitting Dossier to info@sabicoo.com...</span>
+                      </>
+                    ) : (
+                      <span>Submit Scoping Request → info@sabicoo.com</span>
+                    )}
                   </button>
                 </form>
               ) : (
@@ -272,21 +327,36 @@ export const ContactPage: React.FC<ContactPageProps> = () => {
                     <CheckCircle className="w-8 h-8 text-[#1896FA]" weight="fill" />
                   </div>
                   <h3 className="font-display font-bold text-2xl text-[#0A0F1D]">
-                    Inquiry Received Successfully
+                    Inquiry Received & Routed to info@sabicoo.com
                   </h3>
                   <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed font-semibold">
-                    Thank you, <strong className="text-[#0A0F1D]">{formData.name}</strong>. Our senior operating team has logged your operational dossier for <strong className="text-[#0A0F1D]">{formData.businessName}</strong>.
+                    Thank you, <strong className="text-[#0A0F1D]">{formData.name}</strong>. Your operational brief for <strong className="text-[#0A0F1D]">{formData.businessName}</strong> has been transmitted to <span className="text-[#1896FA] font-bold">info@sabicoo.com</span>.
                   </p>
                   <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-600 max-w-sm mx-auto text-left space-y-1.5 font-bold">
+                    <div>Recipient: <span className="font-bold text-[#1896FA]">info@sabicoo.com</span></div>
                     <div>Stage: <span className="font-bold text-[#0A0F1D]">{formData.currentRevenue}</span></div>
+                    {preselectedTrack && (
+                      <div>Track: <span className="font-bold text-[#0A0F1D]">{preselectedTrack}</span></div>
+                    )}
                     <div>SLA: <span className="font-bold text-green-600">Guaranteed 24-Hour Scoping Call</span></div>
                   </div>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="mt-6 px-6 py-2.5 rounded-full border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-                  >
-                    Submit Another Request
-                  </button>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+                    {mailtoUrl && (
+                      <a
+                        href={mailtoUrl}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1896FA] text-white text-xs font-bold hover:bg-blue-600 transition-colors shadow-sm"
+                      >
+                        <EnvelopeSimple className="w-4 h-4" weight="bold" />
+                        <span>Open Direct Email Draft Copy</span>
+                      </a>
+                    )}
+                    <button
+                      onClick={() => setSubmitted(false)}
+                      className="px-6 py-2.5 rounded-full border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                    >
+                      Submit Another Request
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

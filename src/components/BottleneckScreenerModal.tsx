@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { SCREENER_QUESTIONS } from '../data/sabiData';
 import { RollingButton } from './RollingButton';
-import { Sparkle, ArrowRight, ArrowsClockwise, X } from '@phosphor-icons/react';
+import { Sparkle, ArrowRight, ArrowsClockwise, X, CheckCircle, CircleNotch, EnvelopeSimple } from '@phosphor-icons/react';
+import { submitToSabiInbox, TARGET_INBOX_EMAIL } from '../services/mailService';
 
 interface BottleneckScreenerModalProps {
   isOpen: boolean;
@@ -18,6 +19,9 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
   const [scores, setScores] = useState({ founder: 0, ops: 0, cash: 0, people: 0 });
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [senderEmail, setSenderEmail] = useState('');
+  const [isSendingReport, setIsSendingReport] = useState(false);
+  const [reportSent, setReportSent] = useState(false);
 
   if (!isOpen) return null;
 
@@ -92,6 +96,35 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
     setScores({ founder: 0, ops: 0, cash: 0, people: 0 });
     setSelectedOption(null);
     setIsCompleted(false);
+    setSenderEmail('');
+    setReportSent(false);
+  };
+
+  const handleSendDiagnosisEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!senderEmail.trim() || !diagnosis) return;
+    setIsSendingReport(true);
+    try {
+      await submitToSabiInbox({
+        formType: '60-Second Bottleneck Audit Result',
+        subject: `[Sabi COO Screener] Diagnostic Audit: ${diagnosis.category} (${senderEmail.trim()})`,
+        senderEmail: senderEmail.trim(),
+        fields: {
+          'Diagnosis Category': diagnosis.category,
+          'Severity Level': diagnosis.severity,
+          'Forensic Analysis': diagnosis.analysis,
+          'Recommended Operator Intervention': diagnosis.recommendation,
+          'Founder Friction Points': scores.founder,
+          'Process Void Points': scores.ops,
+          'Cash Flow Points': scores.cash,
+          'Accountability Points': scores.people,
+          'Routing Destination': TARGET_INBOX_EMAIL,
+        }
+      });
+      setReportSent(true);
+    } finally {
+      setIsSendingReport(false);
+    }
   };
 
   return (
@@ -219,6 +252,46 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
               <p className="text-xs sm:text-sm text-[#0A0F1D] leading-relaxed font-bold bg-slate-50 p-3.5 rounded-xl border border-slate-200">
                 {diagnosis.recommendation}
               </p>
+            </div>
+
+            {/* Direct Email Dispatch of Diagnosis */}
+            <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-[#021347]">
+                  Send Diagnostic Report to Your Email & Sabi COO:
+                </span>
+                <span className="text-[11px] font-mono font-bold text-[#1896FA]">info@sabicoo.com</span>
+              </div>
+
+              {!reportSent ? (
+                <form onSubmit={handleSendDiagnosisEmail} className="flex gap-2">
+                  <input
+                    required
+                    type="email"
+                    placeholder="Enter your work email..."
+                    value={senderEmail}
+                    onChange={(e) => setSenderEmail(e.target.value)}
+                    className="flex-1 px-3 py-2 bg-white rounded-xl border border-slate-300 text-xs font-semibold text-[#0A0F1D] focus:outline-none focus:border-[#1896FA]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isSendingReport}
+                    className="px-4 py-2 bg-[#1896FA] hover:bg-blue-600 disabled:bg-slate-400 text-white font-bold text-xs rounded-xl transition-all cursor-pointer shadow-xs flex items-center gap-1.5 shrink-0"
+                  >
+                    {isSendingReport ? (
+                      <CircleNotch className="w-3.5 h-3.5 animate-spin" weight="bold" />
+                    ) : (
+                      <EnvelopeSimple className="w-3.5 h-3.5" weight="bold" />
+                    )}
+                    <span>Send Report</span>
+                  </button>
+                </form>
+              ) : (
+                <div className="text-xs text-green-700 font-bold bg-white p-2.5 rounded-xl border border-green-200 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-green-600 shrink-0" weight="fill" />
+                  <span>Report dispatched to {senderEmail} & logged for info@sabicoo.com.</span>
+                </div>
+              )}
             </div>
 
             <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-3">

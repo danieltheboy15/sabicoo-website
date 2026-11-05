@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BRAND_ASSETS } from '../data/sabiData';
 import { Instagram, Mail, ArrowUp } from 'iconoir-react';
+import { submitToSabiInbox, TARGET_INBOX_EMAIL } from '../services/mailService';
 
 interface FooterProps {
   onNavigatePage: (page: string, tab?: 'tier-1' | 'tier-2') => void;
@@ -85,6 +86,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenScreener
 }) => {
   const [email, setEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [activeLetter, setActiveLetter] = useState(0);
 
@@ -97,11 +99,24 @@ export const Footer: React.FC<FooterProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (!email.trim()) return;
+    setIsSubscribing(true);
+    try {
+      await submitToSabiInbox({
+        formType: 'Executive Playbook & Operational Newsletter',
+        subject: `[Sabi COO Newsletter] New Subscriber: ${email.trim()}`,
+        senderEmail: email.trim(),
+        fields: {
+          'Subscriber Email': email.trim(),
+          'Subscription Channel': 'Executive Playbooks & Operations Notes',
+          'Target Recipient': TARGET_INBOX_EMAIL,
+        }
+      });
       setSubscribed(true);
-      setEmail('');
+    } finally {
+      setIsSubscribing(false);
     }
   };
 
@@ -276,14 +291,19 @@ export const Footer: React.FC<FooterProps> = ({
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2 sm:py-2.5 rounded-full bg-[#1896FA] text-white hover:bg-blue-600 text-xs sm:text-sm font-extrabold transition-colors cursor-pointer shadow-md active:scale-98"
+                  disabled={isSubscribing}
+                  className="w-full py-2 sm:py-2.5 rounded-full bg-[#1896FA] text-white hover:bg-blue-600 disabled:bg-slate-500 text-xs sm:text-sm font-extrabold transition-colors cursor-pointer shadow-md active:scale-98 flex items-center justify-center gap-1.5"
                 >
-                  Subscribe
+                  {isSubscribing ? (
+                    <span>Subscribing...</span>
+                  ) : (
+                    <span>Subscribe</span>
+                  )}
                 </button>
               </form>
             ) : (
               <div className="text-xs sm:text-sm text-[#1896FA] font-bold p-2.5 bg-white/10 rounded-2xl border border-white/20">
-                Thank you! Your submission has been received!
+                ✓ Subscribed! Confirmation sent to <span className="underline">info@sabicoo.com</span>
               </div>
             )}
           </div>
