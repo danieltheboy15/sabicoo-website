@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sabi COO Primary Sitemap
+Sitemap: https://sabicoo.com/sitemap.xml
