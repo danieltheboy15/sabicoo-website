@@ -134,9 +134,7 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-blue-50 text-[#1896FA] flex items-center justify-center font-bold">
-              <Sparkle className="w-4 h-4 text-[#1896FA]" weight="fill" />
-            </div>
+            
             <div>
               <span className="text-[10px] font-mono font-bold text-[#1896FA] uppercase tracking-wider block">
                 Diagnostic Screener
