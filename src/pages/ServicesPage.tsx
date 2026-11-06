@@ -104,8 +104,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
         {/* ================= TIER 1 SECTION ================= */}
         {activeTab === 'tier-1' && (
           <div className="space-y-16">
-            {/* Top Overview: Clean Editorial Layout (No nested boxes/cards, no badges) */}
-            <div className="space-y-10 pb-12 border-b border-gray-200">
+            {/* Top Overview: Clean Editorial Layout */}
+            <div className="pb-12 border-b border-gray-200">
               <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
                 <div className="max-w-3xl space-y-4">
                   <h2 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl text-[#021347] tracking-tight leading-[1.15]">
@@ -123,45 +123,6 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                   >
                     Book a Discovery Call
                   </RollingButton>
-                </div>
-              </div>
-
-              {/* Engagement Architecture Highlights - Open Typographic Columns (No Cards, No Boxes) */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-gray-200">
-                <div className="space-y-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#1896FA] block">
-                    ENGAGEMENT TIMEFRAME
-                  </span>
-                  <div className="text-2xl font-bold text-[#021347]">
-                    3, 6, 9, or 12 Months
-                  </div>
-                  <p className="text-sm font-normal text-gray-600 leading-relaxed">
-                    Delivered across structured 3, 6, 9, or 12-month phases tailored to your business scale and organizational complexity.
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#1896FA] block">
-                    COMMERCIAL TERMS
-                  </span>
-                  <div className="text-2xl font-bold text-[#021347]">
-                    Fixed Fee Milestone Model
-                  </div>
-                  <p className="text-sm font-normal text-gray-600 leading-relaxed">
-                    Priced at a fixed fee with a % paid upfront and the remainder invoiced at the midpoint or on agreed milestones.
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#1896FA] block">
-                    CORE PRODUCT FOCUS
-                  </span>
-                  <div className="text-2xl font-bold text-[#021347]">
-                    Operational & Organisational Build
-                  </div>
-                  <p className="text-sm font-normal text-gray-600 leading-relaxed">
-                    End-to-end execution: writing SOPs, designing reporting dashboards, clarifying organizational structure, and training frontline teams.
-                  </p>
                 </div>
               </div>
             </div>
