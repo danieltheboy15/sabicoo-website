@@ -167,7 +167,7 @@ export const ENGAGEMENT_TRACKS = {
     title: "Tier 1 — Fixed-Fee Engagement",
     subtitle: "A structured engagement for businesses that need operational and organisational build. Delivered over 3, 6, 9, or 12 months. Priced at a fixed fee with a % paid upfront and the remainder invoiced at the midpoint or on agreed milestones. This is SabiCOO's primary revenue product.",
     targetRevenue: "Established businesses with active operations",
-    profile: "Established businesses and leadership teams that require a comprehensive operational and organisational build. Designed for companies ready for a structured 3, 6, 9, or 12-month build to transition from ad-hoc management to autonomous systems.",
+    profile: "Businesses and leadership teams that require a comprehensive operational and organisational build. Designed for companies ready for a structured 3, 6, 9, or 12-month build to transition from ad-hoc management to autonomous systems.",
     duration: "Delivered over 3, 6, 9, or 12 Months",
     deliverables: [
       "Forensic operational constraint diagnostic and organisational design report",
@@ -236,7 +236,7 @@ export const SERVICES_MANDATES: ServiceItem[] = [
   {
     id: "bpo-management",
     number: "03",
-    title: "Business Process Outsourcing (BPO)",
+    title: "Business Process Outsourcing",
     subtitle: "Full operational management of defined business functions",
     audience: "CFOs, HR Directors, Rapidly Scaling Enterprises",
     description: "Sabi COO assumes end-to-end operational management of a defined business function on an ongoing basis. We eliminate internal management overhead while enforcing institutional accuracy and compliance.",
