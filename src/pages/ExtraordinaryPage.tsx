@@ -52,7 +52,7 @@ export const ExtraordinaryPage: React.FC<ExtraordinaryPageProps> = ({
           </h1>
 
           <p className="mt-5 text-base sm:text-xl md:text-2xl text-white/95 max-w-3xl leading-relaxed font-semibold">
-            Designed for established organizations, mid-sized companies, institutions, and boards that require high-value, time-bound work executed at a senior level.
+            Designed for organizations, companies, institutions, and boards that require high-value, time-bound work executed at a senior level.
           </p>
 
           {/* Institutional Highlights - Pure White Text */}

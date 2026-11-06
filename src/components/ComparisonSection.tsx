@@ -264,7 +264,7 @@ export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
               </h3>
 
               <p className="text-base sm:text-lg text-[#021347] leading-relaxed mb-6 font-bold">
-                Tier 1 offers structured, fixed-fee operational and organisational builds for established businesses, delivered over 3–12 months. Tier 2 is a selective equity or revenue-share partnership for promising early-stage ventures.
+                Tier 1 offers structured, fixed-fee operational and organisational builds for businesses, delivered over 3–12 months. Tier 2 is a selective equity or revenue-share partnership for promising early-stage ventures.
               </p>
 
               <div className="rounded-2xl overflow-hidden bg-white border border-gray-200 mb-5 shadow-sm">
@@ -310,7 +310,7 @@ export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
               </h3>
 
               <p className="text-base sm:text-lg text-[#021347] leading-relaxed mb-6 font-bold">
-                Designed for established organizations, mid-sized companies, institutions, and boards that require high-value, time-bound work executed at a senior level across 6 defined disciplines.
+                Designed for organizations, companies, institutions, and boards that require high-value, time-bound work executed at a senior level across 6 defined disciplines.
               </p>
 
               <div className="rounded-2xl overflow-hidden bg-white border border-gray-200 mb-5 shadow-sm">

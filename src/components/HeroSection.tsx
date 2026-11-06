@@ -14,7 +14,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <div
       id="hero-track"
-      className="sticky top-0 h-[100dvh] w-full z-0 overflow-hidden bg-[#010926] select-none m-0 p-0 flex items-center justify-center"
+      className="sticky top-0 min-h-[100dvh] h-[100dvh] w-full z-0 overflow-hidden bg-[#010926] select-none m-0 p-0 flex flex-col justify-center items-center"
     >
       {/* High-Resolution Brand Operations Studio & War Room Background Image - Full screen edge-to-edge */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
@@ -36,10 +36,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:48px_48px] pointer-events-none" />
       </div>
 
-      {/* Main Hero Centerpiece - Static, crisp, and fully visible */}
-      <div className="max-w-5xl mx-auto relative z-10 w-full flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-8 pt-20 sm:pt-24 pb-8 sm:pb-12">
+      {/* Main Hero Centerpiece - Generous top clearance ensuring headline never crowds floating navbar */}
+      <div className="max-w-5xl mx-auto relative z-10 w-full flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-8 pt-28 min-[380px]:pt-32 sm:pt-36 md:pt-40 pb-10 sm:pb-14 my-auto">
         {/* Major Hero Headline - Bold, Centered, and Commanding */}
-        <h1 className="font-display font-bold text-center mx-auto text-[27px] min-[380px]:text-[32px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[64px] leading-[1.12] tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)] max-w-4xl">
+        <h1 className="font-display font-bold text-center mx-auto text-[26px] min-[360px]:text-[28px] min-[400px]:text-[32px] sm:text-4xl md:text-5xl lg:text-[58px] xl:text-[64px] leading-[1.14] tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)] max-w-4xl">
           Helping businesses{' '}
           <span className="relative inline-block px-2.5 sm:px-4 py-0.5 mx-0.5 sm:mx-1 bg-[#1896FA] text-white rounded-lg sm:rounded-xl shadow-lg shadow-blue-500/30 -rotate-1 font-bold">
             fix
