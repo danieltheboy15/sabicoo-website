@@ -153,7 +153,7 @@ export const COMPARISON_OPTIONS = [
     type: "SURGICAL OPERATOR PARTNERSHIP",
     title: "Surgical, Milestone Execution",
     priceTag: "Fixed Scope Deliverables",
-    description: "Sabi COO walks directly into the trenches. We diagnose problems forensically. We don't deliver slide decks; we physically write the SOPs, configure software, install dashboards, and train your staff.",
+    description: "We diagnose problems forensically. We don't deliver slide decks; we physically write the SOPs, configure software, install dashboards, and train your staff.",
     result: "RESULT: Autonomous machinery built in 6-12 weeks.",
     isPrimary: true
   }
@@ -469,7 +469,7 @@ export const FAQS: FaqItem[] = [
   {
     category: "Commercials",
     question: "How does Sabi COO price Tier 1 engagements?",
-    answer: "Tier 1 is priced strictly per milestone scope deliverable agreed during the initial discovery and diagnostic intake. There are zero surprise hourly billing charges or endless retainers. You know the exact timeline and exact cost upfront before we begin."
+    answer: "Tier 1 is priced strictly per milestone scope deliverable agreed during the initial discovery and diagnostic intake."
   },
   {
     category: "Eligibility",
@@ -489,7 +489,7 @@ export const FAQS: FaqItem[] = [
   {
     category: "Deliverables",
     question: "Do you just give us documents, or do you help implement them?",
-    answer: "We walk directly into the trenches. We don't deliver passive slide decks; we physically write the SOPs, configure your operational software, build real-time financial dashboards, and conduct live training drills with your staff until execution is autonomous."
+    answer: "We don't deliver passive slide decks; we physically write the SOPs, configure your operational software, build real-time financial dashboards, and conduct live training drills with your staff until execution is autonomous."
   }
 ];
 

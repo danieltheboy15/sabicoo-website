@@ -230,7 +230,7 @@ export const ValuePropositionSection: React.FC<ValuePropositionSectionProps> = (
               </div>
 
               <p className="text-base sm:text-lg md:text-xl leading-relaxed font-bold text-slate-800 mb-6 relative z-10">
-                Sabi COO walks directly into the trenches. We diagnose problems forensically. We don't deliver slide decks; we physically write the SOPs, configure the software, install the dashboards, and train your staff.
+                We diagnose problems forensically. We don't deliver slide decks; we physically write the SOPs, configure the software, install the dashboards, and train your staff.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6 relative z-10">
