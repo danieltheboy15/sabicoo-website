@@ -237,7 +237,7 @@ export const SERVICES_MANDATES: ServiceItem[] = [
     id: "bpo-management",
     number: "03",
     title: "Business Process Outsourcing",
-    subtitle: "Full operational management of defined business functions",
+    subtitle: "Full operational management of business functions",
     audience: "CFOs, HR Directors, Rapidly Scaling Enterprises",
     description: "Sabi COO assumes end-to-end operational management of a defined business function on an ongoing basis. We eliminate internal management overhead while enforcing institutional accuracy and compliance.",
     deliverables: [
