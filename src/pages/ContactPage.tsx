@@ -314,10 +314,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
                     {isSubmitting ? (
                       <>
                         <CircleNotch className="w-5 h-5 animate-spin" weight="bold" />
-                        <span>Transmitting Dossier to info@sabicoo.com...</span>
+                        <span>Submitting...</span>
                       </>
                     ) : (
-                      <span>Submit Scoping Request → info@sabicoo.com</span>
+                      <span>Submit Request</span>
                     )}
                   </button>
                 </form>
