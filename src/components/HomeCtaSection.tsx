@@ -21,7 +21,7 @@ export const HomeCtaSection: React.FC<HomeCtaSectionProps> = ({
               Ready to build the business behind the idea?
             </h3>
             <p className="text-base sm:text-lg text-slate-300 mt-2 font-semibold leading-relaxed">
-              Book a confidential 30-minute scoping discussion with our managing operators.
+              Book a confidential 30-minute discussion with our managing operators.
             </p>
           </div>
 

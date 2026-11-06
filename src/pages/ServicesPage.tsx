@@ -217,7 +217,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                   Ready to eliminate operational bottlenecks?
                 </h4>
                 <p className="text-base sm:text-lg text-slate-200 mt-1 font-bold">
-                  Book a confidential 30-minute scoping discussion with our managing operators.
+                  Book a confidential 30-minute discussion with our managing operators.
                 </p>
               </div>
               <RollingButton
