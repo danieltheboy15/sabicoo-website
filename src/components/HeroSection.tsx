@@ -57,7 +57,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Supporting Paragraph / Value Proposition */}
         <p className="mt-4 sm:mt-6 text-[14px] min-[380px]:text-[15px] sm:text-lg md:text-xl text-white/95 max-w-2xl sm:max-w-3xl leading-relaxed font-semibold text-center mx-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
-          We work with founders at every stage — from turning an early idea into a viable business to strengthening operations, stabilizing cash flow, and building a company that grows sustainability.
+          We work with founders at every stage — from turning an early idea into a viable business to strengthening operations, stabilizing cash flow, and building a company that grows sustainably.
         </p>
 
         {/* Button Group: Aligned to the Middle / Centered Horizontally */}
