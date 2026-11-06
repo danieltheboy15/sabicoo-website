@@ -259,9 +259,6 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                 <h4 className="font-display font-bold text-2xl sm:text-3xl text-white">
                   Apply for the Sabi COO Partner Track
                 </h4>
-                <p className="text-base sm:text-lg text-slate-200 mt-1 font-bold">
-                  Submit your venture brief and metrics for partner review.
-                </p>
               </div>
               <RollingButton
                 variant="blue"
