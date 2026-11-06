@@ -226,7 +226,7 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) =>
                 </div>
 
                 <p className="text-base sm:text-lg md:text-xl leading-relaxed font-bold text-[#021347] mb-6">
-                  We do not give you homework. We work side-by-side with your staff to write clear, step-by-step checklists (SOPs), set up easy digital tools on their phones or computers, and make sure everyone knows their exact daily duties.
+                  We work side-by-side with your staff to write clear, step-by-step checklists (SOPs), set up easy digital tools on their phones or computers, and make sure everyone knows their exact daily duties.
                 </p>
 
                 <div className="space-y-3 mb-6">
