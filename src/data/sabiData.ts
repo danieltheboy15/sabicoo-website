@@ -170,11 +170,11 @@ export const ENGAGEMENT_TRACKS = {
     profile: "Businesses and leadership teams that require a comprehensive operational and organisational build. Designed for companies ready for a structured 3, 6, 9, or 12-month build to transition from ad-hoc management to autonomous systems.",
     duration: "Delivered over 3, 6, 9, or 12 Months",
     deliverables: [
-      "Forensic operational constraint diagnostic and organisational design report",
-      "Company-wide Standard Operating Procedures (SOPs) and workflow architecture",
-      "Custom operational KPI dashboards, leadership scorecards, and live analytics",
-      "Organisational charts, role clarity, delegation protocols, and accountability matrices",
-      "Hands-on frontline and management personnel training with autonomous handover"
+      "A complete audit of what is slowing your business down, with a clear step-by-step fix",
+      "Simple, step-by-step operating guides (SOPs) so daily work gets done smoothly",
+      "Easy-to-read scorecards and live dashboards to track your key numbers at a glance",
+      "Clear team structure, job roles, and delegation rules so everyone knows who does what",
+      "Hands-on training for your managers and staff so the business runs without you"
     ],
     pricingModel: "Priced at a fixed fee with a % paid upfront and remainder invoiced at the midpoint or on agreed milestones",
     disqualifier: "Early-stage concepts, unvalidated ideas, or ventures seeking equity-only / co-building arrangements (explore Tier 2 Partner Track). Not for companies looking for passive slide decks or hourly staffing."
@@ -189,11 +189,11 @@ export const ENGAGEMENT_TRACKS = {
     profile: "Reserved for pre-revenue or very early-stage businesses where cash is constrained but the opportunity is strong.",
     duration: "Selective Cohort",
     deliverables: [
-      "Forensic operational constraint diagnostic and organisational design report",
-      "Company-wide Standard Operating Procedures (SOPs) and workflow architecture",
-      "Custom operational KPI dashboards, leadership scorecards, and live analytics",
-      "Organisational charts, role clarity, delegation protocols, and accountability matrices",
-      "Hands-on frontline and management personnel training with autonomous handover"
+      "A complete audit of what is slowing your business down, with a clear step-by-step fix",
+      "Simple, step-by-step operating guides (SOPs) so daily work gets done smoothly",
+      "Easy-to-read scorecards and live dashboards to track your key numbers at a glance",
+      "Clear team structure, job roles, and delegation rules so everyone knows who does what",
+      "Hands-on training for your managers and staff so the business runs without you"
     ],
     pricingModel: "Equity or a revenue share arrangement",
     disqualifier: ""

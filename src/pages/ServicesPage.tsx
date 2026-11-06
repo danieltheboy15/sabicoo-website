@@ -112,7 +112,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                     Tier 1 — Fixed-Fee Engagement
                   </h2>
                   <p className="text-lg sm:text-xl text-gray-700 leading-relaxed font-normal">
-                    A structured engagement for businesses that need operational and organisational build. Delivered over 3, 6, 9, or 12 months. Priced at a fixed fee with a % paid upfront and the remainder invoiced at the midpoint or on agreed milestones. This is SabiCOO's primary revenue product.
+                    A structured, hands-on build to fix operational bottlenecks, organize your team, and put repeatable systems in place. Delivered over 3, 6, 9, or 12 months with fixed, transparent pricing tied to clear milestones.
                   </p>
                 </div>
                 <div className="shrink-0 pt-2">
@@ -132,14 +132,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
                 <div>
                   <span className="text-xs font-bold text-[#1896FA] uppercase tracking-wider block">
-                    DELIVERABLE ARCHITECTURE
+                    WHAT WE BUILD FOR YOU
                   </span>
                   <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#021347]">
-                    What Founders Receive In Tier 1
+                    What You Get In Tier 1
                   </h3>
                 </div>
                 <span className="text-xs font-bold text-gray-500 uppercase">
-                  Milestone-Gated SLA
+                  Delivered In Clear Milestones
                 </span>
               </div>
 
@@ -204,7 +204,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                     Tier 2 — Partner Track
                   </h2>
                   <p className="text-lg sm:text-xl text-gray-700 leading-relaxed font-normal">
-                    Reserved for pre-revenue or very early-stage businesses where cash is constrained but the opportunity is strong. SabiCo takes equity or a revenue share arrangement in exchange for equivalent engagement depth as Tier 1.
+                    Built for promising early-stage businesses that need hands-on operational systems but prefer an equity or revenue-share partnership in place of cash.
                   </p>
                 </div>
                 <div className="shrink-0 pt-2">
@@ -224,14 +224,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
                 <div>
                   <span className="text-xs font-bold text-[#1896FA] uppercase tracking-wider block">
-                    DELIVERABLE ARCHITECTURE
+                    WHAT WE BUILD FOR YOU
                   </span>
                   <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#021347]">
-                    What Founders Receive In Tier 2
+                    What You Get In Tier 2
                   </h3>
                 </div>
                 <span className="text-xs font-bold text-gray-500 uppercase">
-                  Milestone-Gated SLA
+                  Delivered In Clear Milestones
                 </span>
               </div>
 
