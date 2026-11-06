@@ -77,11 +77,8 @@ export const ExtraordinaryPage: React.FC<ExtraordinaryPageProps> = ({
       <section className="py-20 border-b border-slate-100 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-14">
-            <div className="font-mono text-xs font-bold text-[#1896FA] uppercase tracking-widest mb-3">
-              THE 6 DEFINED MANDATE DISCIPLINES
-            </div>
             <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-[#0A0F1D] tracking-tight">
-              Institutional Solutions In Plain Language
+              The 6 Defined Mandate Disciplines
             </h2>
             <p className="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed font-semibold">
               These are not open-ended retainer client accounts. You bring us a defined strategic challenge; we deliver rigorous senior execution.
