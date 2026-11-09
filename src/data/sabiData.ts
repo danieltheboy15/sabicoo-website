@@ -302,15 +302,15 @@ export const SERVICES_MANDATES: ServiceItem[] = [
 export const METHODOLOGY_STEPS = [
   {
     number: "01",
-    name: "Intake",
-    summary: "Confidential scoping & symptom isolation",
-    details: "We ingest your financial records, org chart, communications cadences, and key pain points."
+    name: "Business Intake & Discovery",
+    summary: "Getting to know your business",
+    details: "We start by understanding how your business operates, what it offers, and what you’re looking to achieve."
   },
   {
     number: "02",
-    name: "Diagnostic",
-    summary: "Root-cause modeling & operational audit",
-    details: "We map the hidden failure points between sales, fulfilment, invoicing, and management oversight."
+    name: "Business Diagnostic & Mapping",
+    summary: "Understanding how your business really works",
+    details: "We examine daily operations, team workflows, and root causes to identify bottlenecks and build a prioritised action plan."
   },
   {
     number: "03",

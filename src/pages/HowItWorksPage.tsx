@@ -121,26 +121,31 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) =>
                       STEP 01
                     </span>
                     <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl uppercase tracking-tight text-[#021347]">
-                      The Business Checkup
+                      Getting To Know Your Business
                     </h3>
                   </div>
                   <div className="font-bold text-sm sm:text-base text-[#1896FA] shrink-0 uppercase tracking-wider">
-                    Discovery & Intake
+                    Business Intake & Discovery
                   </div>
                 </div>
 
-                <p className="text-base sm:text-lg md:text-xl leading-relaxed font-bold text-[#021347] mb-6">
-                  We sit down with you and look closely at how your business runs today. We check how money comes in, where expenses go, and identify all the daily problems that force you to work 14-hour days answering constant phone calls.
-                </p>
+                <div className="space-y-4 text-base sm:text-lg md:text-xl leading-relaxed font-bold text-[#021347] mb-6">
+                  <p>
+                    Before we can help improve your business, we need to understand it. We start by getting to know your business, how it operates, what it offers, who it serves, and what you’re looking to achieve.
+                  </p>
+                  <p>
+                    We gather the essential information about your business, its structure, team, products or services, existing processes, and current challenges. We also establish your expectations, priorities, and what success looks like for you.
+                  </p>
+                </div>
 
                 <div className="space-y-3 mb-6">
                   <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
                     What We Deliver In This Step:
                   </span>
                   {[
-                    "A clear review of your cash flow, daily sales records, and pending customer payments",
-                    "A complete list of every single task where the business is stuck waiting for your personal approval",
-                    "A clear written plan with agreed goals, exact timelines, and signed confidentiality protection"
+                    "An understanding of your business goals, immediate priorities, expectations, and the challenges you want to address.",
+                    "A collection of relevant business information, documents, records, and existing systems needed for the engagement.",
+                    "An agreed scope of work, engagement objectives, timelines, and expectations for the process ahead."
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-[#1896FA] shrink-0 mt-0.5" />
@@ -152,7 +157,7 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) =>
                 </div>
 
                 <div className="p-4 rounded-xl font-bold text-sm sm:text-base bg-blue-50 text-[#021347] border border-blue-200">
-                  STEP 1 RESULT: You get a clear, honest picture of where your time is being wasted and why your business cannot run without you.
+                  STEP 1 RESULT: A clear understanding of your business, its needs, and what we will be working towards together.
                 </div>
               </div>
             </div>
@@ -169,26 +174,35 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) =>
                       STEP 02
                     </span>
                     <h3 className="font-display font-bold text-2xl sm:text-3xl md:text-4xl uppercase tracking-tight text-[#021347]">
-                      Finding Where Money & Time Leak
+                      Understanding How Your Business Really Works
                     </h3>
                   </div>
                   <div className="font-bold text-sm sm:text-base text-[#1896FA] shrink-0 uppercase tracking-wider">
-                    Diagnostic & Mapping
+                    Business Diagnostic & Mapping
                   </div>
                 </div>
 
-                <p className="text-base sm:text-lg md:text-xl leading-relaxed font-bold text-[#021347] mb-6">
-                  We trace how customer orders move through your company from the first conversation to delivery and payment. We find out why customer orders get delayed, why inventory goes missing, and why staff make costly mistakes.
-                </p>
+                <div className="space-y-4 text-base sm:text-lg md:text-xl leading-relaxed font-bold text-[#021347] mb-6">
+                  <p>
+                    Now that we understand your business, it’s time to look beneath the surface.
+                  </p>
+                  <p>
+                    We take a closer look at how different parts of your business function, from daily operations and internal processes to people management, sales, customer experience, financial management, and the systems that hold everything together.
+                  </p>
+                  <p>
+                    We examine how work gets done, how decisions are made, where resources are being wasted, and where things break down. We identify inefficiencies, operational gaps, recurring challenges, and the root causes behind them, not just the symptoms.
+                  </p>
+                </div>
 
                 <div className="space-y-3 mb-6">
                   <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
                     What We Deliver In This Step:
                   </span>
                   {[
-                    "A simple 13-week cash planning spreadsheet so you always know your bank balance and upcoming expenses in advance",
-                    "A clear map showing every step in sales, delivery, and customer service that causes delays or confusion",
-                    "A prioritized action plan detailing the exact processes to fix, simplify, or automate first"
+                    "A comprehensive assessment of your business operations, highlighting what’s working, what’s not, and where improvements are needed.",
+                    "A clear map of your key business processes, workflows, responsibilities, and the areas where bottlenecks or inefficiencies occur.",
+                    "Identification of operational gaps, resource constraints, risks, and opportunities for improvement across the business.",
+                    "A prioritised action plan outlining what needs to be fixed, improved, streamlined, or automated, and where to start."
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-[#1896FA] shrink-0 mt-0.5" />
@@ -200,7 +214,7 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) =>
                 </div>
 
                 <div className="p-4 rounded-xl font-bold text-sm sm:text-base bg-blue-50 text-[#021347] border border-blue-200">
-                  STEP 2 RESULT: A crystal-clear blueprint of the exact processes we will fix, step by step, so mistakes and delays stop happening.
+                  STEP 2 RESULT: A clear picture of your business’s current state, the problems holding it back, and a prioritised roadmap for making things better.
                 </div>
               </div>
             </div>
