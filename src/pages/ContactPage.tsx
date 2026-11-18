@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CalendarBlank, PaperPlaneTilt, CheckCircle, Sparkle, ArrowSquareOut, EnvelopeSimple, CircleNotch } from '@phosphor-icons/react';
+import { CalendarBlank, PaperPlaneTilt, CheckCircle, Sparkle, ArrowSquareOut, CircleNotch } from '@phosphor-icons/react';
 import { submitToSabiInbox, TARGET_INBOX_EMAIL } from '../services/mailService';
 
 interface ContactPageProps {
@@ -10,7 +10,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
   const [activeTab, setActiveTab] = useState<'calendly' | 'form'>('calendly');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [mailtoUrl, setMailtoUrl] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -59,7 +58,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
 
     setIsSubmitting(true);
     try {
-      const result = await submitToSabiInbox({
+      await submitToSabiInbox({
         formType: 'Full Diagnostic Inquiry Form',
         subject: `[Sabi COO Inquiry] New Diagnostic Dossier: ${formData.name} (${formData.businessName})`,
         senderName: formData.name,
@@ -75,7 +74,6 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
           'Target Recipient': TARGET_INBOX_EMAIL,
         }
       });
-      setMailtoUrl(result.mailtoFallbackUrl);
       setSubmitted(true);
     } finally {
       setIsSubmitting(false);
@@ -327,29 +325,13 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
                     <CheckCircle className="w-8 h-8 text-[#1896FA]" weight="fill" />
                   </div>
                   <h3 className="font-display font-bold text-2xl text-[#0A0F1D]">
-                    Inquiry Received & Routed to info@sabicoo.com
+                    Inquiry Received & Routed to <br />
+                    <span className="text-[#1896FA]">info@sabicoo.com</span>
                   </h3>
                   <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed font-semibold">
-                    Thank you, <strong className="text-[#0A0F1D]">{formData.name}</strong>. Your operational brief for <strong className="text-[#0A0F1D]">{formData.businessName}</strong> has been transmitted to <span className="text-[#1896FA] font-bold">info@sabicoo.com</span>.
+                    Thank you, <strong className="text-[#0A0F1D]">{formData.name}</strong>. Your request has been submitted.
                   </p>
-                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-600 max-w-sm mx-auto text-left space-y-1.5 font-bold">
-                    <div>Recipient: <span className="font-bold text-[#1896FA]">info@sabicoo.com</span></div>
-                    <div>Stage: <span className="font-bold text-[#0A0F1D]">{formData.currentRevenue}</span></div>
-                    {preselectedTrack && (
-                      <div>Track: <span className="font-bold text-[#0A0F1D]">{preselectedTrack}</span></div>
-                    )}
-                    <div>SLA: <span className="font-bold text-green-600">Guaranteed 24-Hour Scoping Call</span></div>
-                  </div>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-                    {mailtoUrl && (
-                      <a
-                        href={mailtoUrl}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1896FA] text-white text-xs font-bold hover:bg-blue-600 transition-colors shadow-sm"
-                      >
-                        <EnvelopeSimple className="w-4 h-4" weight="bold" />
-                        <span>Open Direct Email Draft Copy</span>
-                      </a>
-                    )}
+                  <div className="flex items-center justify-center pt-4">
                     <button
                       onClick={() => setSubmitted(false)}
                       className="px-6 py-2.5 rounded-full border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
