@@ -325,8 +325,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
                     <CheckCircle className="w-8 h-8 text-[#1896FA]" weight="fill" />
                   </div>
                   <h3 className="font-display font-bold text-2xl text-[#0A0F1D]">
-                    Inquiry Received & Routed to <br />
-                    <span className="text-[#1896FA]">info@sabicoo.com</span>
+                    Inquiry Received
                   </h3>
                   <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed font-semibold">
                     Thank you, <strong className="text-[#0A0F1D]">{formData.name}</strong>. Your request has been submitted.
