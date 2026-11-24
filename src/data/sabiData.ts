@@ -68,6 +68,13 @@ export interface ScreenerOption {
     cash: number;
     people: number;
   };
+  strengths?: {
+    founder: number;
+    ops: number;
+    cash: number;
+    people: number;
+  };
+  tone?: 'positive' | 'balanced' | 'challenge';
 }
 
 export interface ScreenerQuestion {
@@ -496,93 +503,125 @@ export const FAQS: FaqItem[] = [
 export const SCREENER_QUESTIONS: ScreenerQuestion[] = [
   {
     id: 1,
-    question: "When you step away from the business completely offline for 5 days, what happens?",
+    question: "When you step away from the business for a few days, how do daily operations hold up?",
     category: "founder",
     options: [
       {
-        label: "Total standstill. Nothing gets approved, billed, or resolved without my direct input.",
-        points: { founder: 4, ops: 2, cash: 1, people: 1 }
+        label: "Operations run smoothly. Team leads handle approvals, client delivery, and routine decisions independently.",
+        points: { founder: 0, ops: 0, cash: 0, people: 0 },
+        strengths: { founder: 4, ops: 3, cash: 1, people: 3 },
+        tone: "positive"
       },
       {
-        label: "Client deliveries get delayed, output quality drops, and several mistakes occur.",
-        points: { founder: 1, ops: 4, cash: 1, people: 2 }
+        label: "Day-to-day delivery continues well, though a few key approvals and client escalations still wait for me.",
+        points: { founder: 2, ops: 0, cash: 0, people: 0 },
+        strengths: { founder: 2, ops: 3, cash: 1, people: 2 },
+        tone: "balanced"
       },
       {
-        label: "Revenue generation stops; invoices do not get issued and receivables pile up.",
-        points: { founder: 2, ops: 1, cash: 4, people: 1 }
+        label: "Work keeps moving, though delivery quality and speed dip because key steps are not documented.",
+        points: { founder: 1, ops: 3, cash: 0, people: 1 },
+        strengths: { founder: 1, ops: 0, cash: 1, people: 2 },
+        tone: "challenge"
       },
       {
-        label: "Employees argue or get confused about who owns which customer issue or escalation.",
-        points: { founder: 1, ops: 2, cash: 1, people: 4 }
+        label: "Approvals, invoicing, and urgent decisions mostly stall until I step back in directly.",
+        points: { founder: 3, ops: 1, cash: 1, people: 0 },
+        strengths: { founder: 0, ops: 1, cash: 0, people: 1 },
+        tone: "challenge"
       }
     ]
   },
   {
     id: 2,
-    question: "How are operational workflows and team responsibilities managed day-to-day?",
+    question: "How are workflows, playbooks, and team responsibilities structured across your company?",
     category: "ops",
     options: [
       {
-        label: "Primarily through WhatsApp groups, informal chats, and whatever emergency arises that morning.",
-        points: { founder: 2, ops: 4, cash: 1, people: 2 }
+        label: "Our team works well together and core roles are clear, though our guides need updating as we grow.",
+        points: { founder: 0, ops: 1, cash: 0, people: 1 },
+        strengths: { founder: 2, ops: 2, cash: 1, people: 3 },
+        tone: "balanced"
       },
       {
-        label: "People wait for me to assign daily tasks; nobody takes initiative without direct instruction.",
-        points: { founder: 4, ops: 1, cash: 1, people: 3 }
+        label: "We have clear, documented SOPs and defined role scorecards that the team follows consistently.",
+        points: { founder: 0, ops: 0, cash: 0, people: 0 },
+        strengths: { founder: 2, ops: 4, cash: 1, people: 4 },
+        tone: "positive"
       },
       {
-        label: "We have Google Docs or Notion, but nobody actually reads or adheres to them in practice.",
-        points: { founder: 1, ops: 4, cash: 1, people: 1 }
+        label: "We have hardworking people, but overlapping duties sometimes cause confusion over who owns what.",
+        points: { founder: 0, ops: 1, cash: 0, people: 3 },
+        strengths: { founder: 1, ops: 1, cash: 1, people: 1 },
+        tone: "challenge"
       },
       {
-        label: "Roles overlap heavily; two people do the same task while critical things fall through the cracks.",
-        points: { founder: 1, ops: 2, cash: 1, people: 4 }
+        label: "Most coordination happens informally in chats and calls rather than repeatable workflows.",
+        points: { founder: 1, ops: 3, cash: 0, people: 1 },
+        strengths: { founder: 0, ops: 0, cash: 1, people: 1 },
+        tone: "challenge"
       }
     ]
   },
   {
     id: 3,
-    question: "What does your cash flow management and billing rhythm look like?",
+    question: "How would you describe your cash flow visibility, billing, and financial rhythm?",
     category: "cash",
     options: [
       {
-        label: "Unpredictable. We have revenue on paper, but end-of-month payroll is always a tense scramble.",
-        points: { founder: 1, ops: 2, cash: 4, people: 1 }
+        label: "Healthy and predictable. Invoices go out on schedule, collections stay tight, and we forecast ahead.",
+        points: { founder: 0, ops: 0, cash: 0, people: 0 },
+        strengths: { founder: 1, ops: 2, cash: 4, people: 1 },
+        tone: "positive"
       },
       {
-        label: "Invoices go out with delays, and customer receivables routinely sit unpaid past 60-90 days.",
-        points: { founder: 2, ops: 2, cash: 4, people: 0 }
+        label: "Sales and cash inflow are steady, though we want sharper forecasting to protect margins as costs rise.",
+        points: { founder: 0, ops: 1, cash: 1, people: 0 },
+        strengths: { founder: 2, ops: 2, cash: 3, people: 1 },
+        tone: "balanced"
       },
       {
-        label: "I manage the bank balance in my head or check the app; we do not run a 13-week cash forecast.",
-        points: { founder: 3, ops: 1, cash: 4, people: 0 }
+        label: "Demand is strong, but delayed invoicing or slow receivables sometimes squeeze our monthly cash buffer.",
+        points: { founder: 0, ops: 1, cash: 3, people: 0 },
+        strengths: { founder: 1, ops: 1, cash: 1, people: 1 },
+        tone: "challenge"
       },
       {
-        label: "Cash is generally positive, but margins are deteriorating as headcount increases.",
-        points: { founder: 0, ops: 3, cash: 3, people: 2 }
+        label: "Cash tracking is mostly reactive—checking bank balances week-to-week without a structured forecast.",
+        points: { founder: 1, ops: 0, cash: 3, people: 0 },
+        strengths: { founder: 0, ops: 1, cash: 0, people: 1 },
+        tone: "challenge"
       }
     ]
   },
   {
     id: 4,
-    question: "Where does the majority of the founder’s personal weekly hours go?",
+    question: "How is your weekly time as a founder currently balanced between strategy and daily execution?",
     category: "founder",
     options: [
       {
-        label: "70%+ spent fighting tactical emergencies, calming clients, or correcting team mistakes.",
-        points: { founder: 4, ops: 3, cash: 1, people: 2 }
+        label: "Mostly spent troubleshooting daily issues, chasing payments, or stepping in for operational gaps.",
+        points: { founder: 3, ops: 1, cash: 1, people: 0 },
+        strengths: { founder: 0, ops: 0, cash: 0, people: 1 },
+        tone: "challenge"
       },
       {
-        label: "Doing the core delivery work because we lack senior specialists to execute independently.",
-        points: { founder: 3, ops: 2, cash: 1, people: 4 }
+        label: "Mostly dedicated to strategy, partnerships, and growth while department leads run daily work.",
+        points: { founder: 0, ops: 0, cash: 0, people: 0 },
+        strengths: { founder: 4, ops: 2, cash: 2, people: 3 },
+        tone: "positive"
       },
       {
-        label: "Chasing payments, negotiating supplier credit, or balancing cash shortfalls.",
-        points: { founder: 2, ops: 1, cash: 4, people: 1 }
+        label: "A healthy split overall, though routine operational check-ins still take more time than I'd like.",
+        points: { founder: 1, ops: 1, cash: 0, people: 0 },
+        strengths: { founder: 2, ops: 2, cash: 1, people: 2 },
+        tone: "balanced"
       },
       {
-        label: "Constantly interviewing and re-hiring replacements for roles that churned.",
-        points: { founder: 2, ops: 1, cash: 1, people: 4 }
+        label: "I enjoy building with the team, though I still handle key delivery while we build senior capacity.",
+        points: { founder: 1, ops: 0, cash: 0, people: 3 },
+        strengths: { founder: 1, ops: 1, cash: 1, people: 1 },
+        tone: "challenge"
       }
     ]
   }
