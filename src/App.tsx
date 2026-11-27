@@ -19,6 +19,7 @@ import { PortalPage } from './pages/PortalPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { INSIGHTS_ARTICLES, InsightItem } from './data/sabiData';
 import { subscribePublishedInsights } from './services/insightsService';
+import { trackScreenerOpened, ScreenerTriggerSource } from './services/analyticsService';
 import { ArrowUpRight } from 'iconoir-react';
 
 export default function App() {
@@ -59,6 +60,7 @@ export default function App() {
     const timer = setTimeout(() => {
       setScreenerOpen(true);
       sessionStorage.setItem('sabi_screener_auto_opened', 'true');
+      trackScreenerOpened('auto_popup', currentPage);
     }, 7000);
 
     return () => clearTimeout(timer);
@@ -193,8 +195,9 @@ export default function App() {
     setContactOpen(true);
   };
 
-  const handleOpenScreener = () => {
+  const handleOpenScreener = (source: ScreenerTriggerSource = 'floating_button') => {
     setScreenerOpen(true);
+    trackScreenerOpened(source, currentPage);
   };
 
   const handleBookWithDiagnosis = (diagnosisSummary: string) => {
@@ -213,7 +216,7 @@ export default function App() {
       <Navbar
         currentPage={currentPage}
         onNavigate={handleNavigate}
-        onOpenDiagnostic={handleOpenScreener}
+        onOpenDiagnostic={() => handleOpenScreener('navbar')}
       />
 
       {/* Main Dynamic View */}
@@ -222,7 +225,7 @@ export default function App() {
           <>
             {/* 01. Static Full-Screen Edge-to-Edge Hero Section */}
             <HeroSection
-              onOpenScreener={handleOpenScreener}
+              onOpenScreener={() => handleOpenScreener('hero')}
               onOpenContact={() => handleNavigate('contact')}
             />
 
@@ -237,7 +240,7 @@ export default function App() {
               {/* How It Works / 4-Step Sequential Blueprint */}
               <HowItWorksSection
                 onOpenContact={() => handleNavigate('contact')}
-                onOpenScreener={handleOpenScreener}
+                onOpenScreener={() => handleOpenScreener('how_it_works')}
               />
 
               {/* Insight from SabiCoo - Featured 3 Articles */}
@@ -250,7 +253,7 @@ export default function App() {
               {/* Home Page Discovery Call Pre-Footer CTA */}
               <HomeCtaSection
                 onOpenContact={() => handleNavigate('contact')}
-                onOpenScreener={handleOpenScreener}
+                onOpenScreener={() => handleOpenScreener('home_cta')}
               />
             </div>
           </>
@@ -283,7 +286,7 @@ export default function App() {
             selectedArticleId={selectedArticleId}
             onSelectArticle={handleSelectArticle}
             onNavigate={handleNavigate}
-            onOpenScreener={handleOpenScreener}
+            onOpenScreener={() => handleOpenScreener('insights_page')}
           />
         )}
 
@@ -304,7 +307,7 @@ export default function App() {
       <Footer
         onNavigatePage={handleNavigate}
         onOpenContact={handleOpenContactModal}
-        onOpenScreener={handleOpenScreener}
+        onOpenScreener={() => handleOpenScreener('footer')}
       />
 
       {/* Interactive 60-Second Bottleneck Screener Modal */}
@@ -325,7 +328,7 @@ export default function App() {
       {currentPage !== 'portal' && (
         <div className="fixed bottom-6 right-6 z-40 hidden sm:block">
           <button
-            onClick={handleOpenScreener}
+            onClick={() => handleOpenScreener('floating_button')}
             className="group flex items-center gap-2 px-4 py-2.5 bg-[#021347] text-white rounded-full border border-[#1896FA]/40 hover:border-[#1896FA] transition-all duration-300 cursor-pointer text-xs font-semibold shadow-xl shadow-blue-900/20 hover:bg-[#010C2E]"
           >
             <span>60s Screener</span>

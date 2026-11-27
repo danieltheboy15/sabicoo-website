@@ -3,6 +3,14 @@ import { SCREENER_QUESTIONS } from '../data/sabiData';
 import { RollingButton } from './RollingButton';
 import { Sparkle, ArrowRight, ArrowsClockwise, X, CheckCircle, CircleNotch, EnvelopeSimple } from '@phosphor-icons/react';
 import { submitToSabiInbox, TARGET_INBOX_EMAIL } from '../services/mailService';
+import {
+  trackScreenerQuestionAnswered,
+  trackScreenerCompleted,
+  trackScreenerReportEmailSent,
+  trackScreenerBookCallClicked,
+  trackScreenerRetake,
+  trackScreenerClosed
+} from '../services/analyticsService';
 
 interface BottleneckScreenerModalProps {
   isOpen: boolean;
@@ -48,32 +56,53 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
       cash: strengthScores.cash + optStrengths.cash,
       people: strengthScores.people + optStrengths.people
     };
-    setScores(newScores);
-    setStrengthScores(newStrengths);
-    setAnswers([
+    const newAnswers = [
       ...answers,
       {
         question: currentQ.question,
         label: opt.label,
-        tone: opt.tone ?? 'balanced'
+        tone: opt.tone ?? ('balanced' as const)
       }
-    ]);
+    ];
+    setScores(newScores);
+    setStrengthScores(newStrengths);
+    setAnswers(newAnswers);
     setSelectedOption(null);
+
+    trackScreenerQuestionAnswered({
+      questionNumber: currentStep + 1,
+      questionId: currentQ.id,
+      questionText: currentQ.question,
+      selectedOption: opt.label,
+      optionTone: opt.tone ?? 'balanced'
+    });
 
     if (currentStep < SCREENER_QUESTIONS.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
+      const completedDiagnosis = computeDiagnosis(newScores, newStrengths, newAnswers);
       setIsCompleted(true);
+      trackScreenerCompleted({
+        diagnosisCategory: completedDiagnosis.category,
+        healthStatus: completedDiagnosis.healthStatus,
+        badgeTone: completedDiagnosis.badgeTone,
+        totalQuestions: SCREENER_QUESTIONS.length
+      });
     }
   };
 
-  const getDiagnosis = () => {
-    const totalFriction = scores.founder + scores.ops + scores.cash + scores.people;
-    const positiveOrBalancedCount = answers.filter(
+  const computeDiagnosis = (
+    currentScores: { founder: number; ops: number; cash: number; people: number },
+    currentStrengths: { founder: number; ops: number; cash: number; people: number },
+    currentAnswers: { question: string; label: string; tone: 'positive' | 'balanced' | 'challenge' }[]
+  ) => {
+    const totalFriction =
+      currentScores.founder + currentScores.ops + currentScores.cash + currentScores.people;
+    const positiveOrBalancedCount = currentAnswers.filter(
       (a) => a.tone === 'positive' || a.tone === 'balanced'
     ).length;
 
-    const sortedStrengths = Object.entries(strengthScores).sort((a, b) => b[1] - a[1]);
+    const sortedStrengths = Object.entries(currentStrengths).sort((a, b) => b[1] - a[1]);
     const topStrengthKey = sortedStrengths[0][0];
     const secondStrengthKey = sortedStrengths[1][0];
 
@@ -110,7 +139,7 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
       };
     }
 
-    const highestFriction = Object.entries(scores).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
+    const highestFriction = Object.entries(currentScores).reduce((a, b) => (a[1] > b[1] ? a : b))[0];
     const isModerate = totalFriction <= 7;
     const badgeTone = isModerate ? ('balanced' as const) : ('focus' as const);
     const healthStatus = isModerate
@@ -174,9 +203,13 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
     }
   };
 
-  const diagnosis = isCompleted ? getDiagnosis() : null;
+  const diagnosis = isCompleted ? computeDiagnosis(scores, strengthScores, answers) : null;
 
   const handleReset = () => {
+    trackScreenerRetake({
+      fromCompleted: isCompleted,
+      stepNumber: currentStep + 1
+    });
     setCurrentStep(0);
     setScores({ founder: 0, ops: 0, cash: 0, people: 0 });
     setStrengthScores({ founder: 0, ops: 0, cash: 0, people: 0 });
@@ -188,6 +221,15 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
     setDeliveryNotice('');
     setDeliverySuccess(true);
     setMailtoUrl('');
+  };
+
+  const handleModalClose = () => {
+    trackScreenerClosed({
+      completed: isCompleted,
+      lastQuestionNumber: currentStep + 1,
+      reportEmailed: reportSent
+    });
+    onClose();
   };
 
   const handleSendDiagnosisEmail = async (e: React.FormEvent) => {
@@ -217,6 +259,10 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
       setDeliverySuccess(result.success);
       setDeliveryNotice(result.message);
       setReportSent(true);
+      trackScreenerReportEmailSent({
+        diagnosisCategory: diagnosis.category,
+        deliverySuccess: result.success
+      });
     } finally {
       setIsSendingReport(false);
     }
@@ -246,7 +292,7 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
             </div>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleModalClose}
             className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center font-semibold text-sm hover:bg-slate-100 transition-colors cursor-pointer text-slate-500"
           >
             <X className="w-4 h-4" weight="bold" />
@@ -429,6 +475,10 @@ export const BottleneckScreenerModal: React.FC<BottleneckScreenerModalProps> = (
                 variant="dark"
                 size="md"
                 onClick={() => {
+                  trackScreenerBookCallClicked({
+                    diagnosisCategory: diagnosis.category,
+                    healthStatus: diagnosis.healthStatus
+                  });
                   onClose();
                   onBookWithDiagnosis(diagnosis.category);
                 }}
