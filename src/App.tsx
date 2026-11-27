@@ -28,8 +28,8 @@ export default function App() {
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const [publishedArticles, setPublishedArticles] = useState<InsightItem[]>(INSIGHTS_ARTICLES);
   const [showPreloader, setShowPreloader] = useState(() => {
-    const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
-    const pageParam = new URLSearchParams(window.location.search).get('page');
+    const path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+    const pageParam = (new URLSearchParams(window.location.search).get('page') || '').toLowerCase();
     return path !== 'portal' && pageParam !== 'portal';
   });
   const [screenerOpen, setScreenerOpen] = useState(false);
@@ -69,9 +69,9 @@ export default function App() {
   // Handle URL sync and browser back/forward buttons
   useEffect(() => {
     const getInitialState = () => {
-      const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+      const path = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
       const searchParams = new URLSearchParams(window.location.search);
-      const searchParam = searchParams.get('page');
+      const searchParam = (searchParams.get('page') || '').toLowerCase();
       const tabParam = searchParams.get('tab');
       const articleParam = searchParams.get('article');
       const hash = window.location.hash;
@@ -159,12 +159,17 @@ export default function App() {
     setSelectedArticleId(normalizedArticle);
 
     try {
-      let url = page === 'home' ? '/' : page === 'portal' ? '/portal' : `/?page=${page}`;
+      let url = page === 'home' ? '/' : `/${page}`;
+      const params = new URLSearchParams();
       if (page === 'services' && tab) {
-        url += `&tab=${tab}`;
+        params.set('tab', tab);
       }
       if (page === 'insights' && normalizedArticle) {
-        url += `&article=${encodeURIComponent(normalizedArticle)}`;
+        params.set('article', normalizedArticle);
+      }
+      const queryString = params.toString();
+      if (queryString) {
+        url += `?${queryString}`;
       }
       window.history.pushState({ page, tab, article: normalizedArticle }, '', url);
     } catch {

@@ -45,8 +45,8 @@
         "image": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 1000,
-          "description": "Cover image URL or bundled asset path."
+          "maxLength": 350000,
+          "description": "Cover image URL, preset key, uploaded endpoint path, or compressed raster data URI."
         },
         "author": {
           "type": "string",

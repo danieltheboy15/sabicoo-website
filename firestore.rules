@@ -103,7 +103,11 @@ service cloud.firestore {
         && data.excerpt.size() <= 500
         && data.image is string
         && data.image.size() >= 1
-        && data.image.size() <= 1000
+        && data.image.size() <= 350000
+        && (data.image.matches('^https?://.*')
+            || data.image.matches('^preset:[a-z0-9_-]+$')
+            || data.image.matches('^/api/uploads/[0-9a-f-]+\\.(jpg|png|webp|gif)$')
+            || data.image.matches('^data:image/(jpeg|jpg|png|webp|gif);base64,[A-Za-z0-9+/=]+$'))
         && data.author is string
         && data.author.size() >= 2
         && data.author.size() <= 100

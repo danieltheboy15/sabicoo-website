@@ -63,6 +63,9 @@ export function normalizeCoverValueForStorage(imageValue: string): string {
   const trimmed = (imageValue || '').trim();
   if (!trimmed) return 'preset:bottlenecks';
   if (SRC_TO_PRESET_KEY[trimmed]) return SRC_TO_PRESET_KEY[trimmed];
+  if (/^data:image\/(?:jpeg|jpg|png|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(trimmed)) {
+    return trimmed.length <= 350000 ? trimmed : 'preset:bottlenecks';
+  }
   return trimmed.slice(0, 1000);
 }
 

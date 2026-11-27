@@ -314,7 +314,8 @@ export const PortalPage: React.FC<PortalPageProps> = ({
     const matchesPreset = EDITORIAL_COVER_PRESETS.some(
       (p) => p.src === article.image || p.key === article.image
     );
-    const isUploadedAsset = article.image.startsWith('/api/uploads/');
+    const isUploadedAsset =
+      article.image.startsWith('/api/uploads/') || article.image.startsWith('data:image/');
     setEditorForm(form);
     setEditorMode('edit');
     if (matchesPreset) {
@@ -335,6 +336,53 @@ export const PortalPage: React.FC<PortalPageProps> = ({
     setEditorError('');
   };
 
+  const compressImageForPortal = async (file: File): Promise<string> => {
+    const objectUrl = URL.createObjectURL(file);
+    try {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const imageEl = new Image();
+        imageEl.onload = () => resolve(imageEl);
+        imageEl.onerror = () => reject(new Error('Could not decode the selected image.'));
+        imageEl.src = objectUrl;
+      });
+
+      const maxWidth = 1280;
+      const scale = img.width > maxWidth ? maxWidth / img.width : 1;
+      const targetWidth = Math.max(1, Math.round(img.width * scale));
+      const targetHeight = Math.max(1, Math.round(img.height * scale));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        throw new Error('Image processing is unavailable in this browser.');
+      }
+      ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+      const formats: Array<{ mime: string; qualities: number[] }> = [
+        { mime: 'image/webp', qualities: [0.84, 0.72, 0.6, 0.48] },
+        { mime: 'image/jpeg', qualities: [0.84, 0.72, 0.6, 0.48] }
+      ];
+
+      for (const fmt of formats) {
+        for (const q of fmt.qualities) {
+          const dataUrl = canvas.toDataURL(fmt.mime, q);
+          if (
+            dataUrl.startsWith(`data:${fmt.mime};base64,`) &&
+            dataUrl.length <= 320000
+          ) {
+            return dataUrl;
+          }
+        }
+      }
+
+      throw new Error('Image is too complex after compression. Please use a smaller image or an external URL.');
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+    }
+  };
+
   const handleCoverFileUpload = async (file: File | null | undefined) => {
     if (!file || !user) return;
     setUploadError('');
@@ -352,7 +400,7 @@ export const PortalPage: React.FC<PortalPageProps> = ({
 
     setUploadingCover(true);
     try {
-      const dataUrl = await new Promise<string>((resolve, reject) => {
+      const rawDataUrl = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(String(reader.result || ''));
         reader.onerror = () => reject(new Error('Could not read the selected file.'));
@@ -360,23 +408,39 @@ export const PortalPage: React.FC<PortalPageProps> = ({
       });
 
       const idToken = await user.getIdToken();
-      const response = await fetch('/api/upload-cover', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`
-        },
-        body: JSON.stringify({ dataUrl })
-      });
+      let storedUrl = '';
 
-      const result = (await response.json()) as { url?: string; error?: string };
-      if (!response.ok || !result.url) {
-        throw new Error(result.error || 'Artwork upload failed.');
+      try {
+        const response = await fetch('/api/upload-cover', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${idToken}`
+          },
+          body: JSON.stringify({ dataUrl: rawDataUrl })
+        });
+
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const result = (await response.json()) as { url?: string; error?: string };
+          if (!response.ok || !result.url) {
+            throw new Error(result.error || 'Artwork upload failed.');
+          }
+          storedUrl = result.url;
+        }
+      } catch (apiErr) {
+        // Re-throw explicit API validation errors (400/401/403), fall back only on unreachable/non-JSON static hosts
+        if (apiErr instanceof Error && apiErr.message && !apiErr.message.includes('Failed to fetch')) {
+          throw apiErr;
+        }
       }
 
-      const uploadedUrl = result.url;
-      setUploadedImageUrl(uploadedUrl);
-      setEditorForm((prev) => (prev ? { ...prev, image: uploadedUrl } : prev));
+      if (!storedUrl) {
+        storedUrl = await compressImageForPortal(file);
+      }
+
+      setUploadedImageUrl(storedUrl);
+      setEditorForm((prev) => (prev ? { ...prev, image: storedUrl } : prev));
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : 'Artwork upload failed.');
     } finally {
@@ -409,6 +473,14 @@ export const PortalPage: React.FC<PortalPageProps> = ({
     }
     if (!resolvedImage) {
       setEditorError('Please choose a cover image or enter a valid image URL.');
+      return;
+    }
+    if (
+      !/^(https?:\/\/|preset:[a-z0-9_-]+$|\/api\/uploads\/|data:image\/(?:jpeg|jpg|png|webp|gif);base64,)/.test(
+        resolvedImage
+      )
+    ) {
+      setEditorError('Cover artwork URL must start with https:// or be uploaded via the artwork picker.');
       return;
     }
 
