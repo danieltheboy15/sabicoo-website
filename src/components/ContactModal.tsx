@@ -25,7 +25,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     email: '',
     phone: '',
     company: '',
-    revenue: '₦10M - ₦50M ARR',
+    revenue: '₦10M - ₦50M Annual Recurring Revenue',
     track: preselectedTrack || 'Tier 1 - Fixed-Fee Engagement',
     bottleneck: ''
   });
@@ -239,11 +239,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                     onChange={(e) => setForm({ ...form, revenue: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold text-[#0A0F1D] bg-white focus:outline-none focus:border-[#1896FA]"
                   >
-                    <option value="Pre-revenue">Pre-revenue (₦0)</option>
-                    <option value="₦0 - ₦10M ARR">₦0 - ₦10M ARR</option>
-                    <option value="₦10M - ₦50M ARR">₦10M - ₦50M ARR</option>
-                    <option value="₦50M - ₦100M ARR">₦50M - ₦100M ARR</option>
-                    <option value="Above ₦100M ARR">Above ₦100M ARR</option>
+                    <option value="Pre-revenue (₦0)">Pre-revenue (₦0)</option>
+                    <option value="₦0 - ₦10M Annual Recurring Revenue">₦0 - ₦10M Annual Recurring Revenue</option>
+                    <option value="₦10M - ₦50M Annual Recurring Revenue">₦10M - ₦50M Annual Recurring Revenue</option>
+                    <option value="₦50M - ₦100M Annual Recurring Revenue">₦50M - ₦100M Annual Recurring Revenue</option>
+                    <option value="Above ₦100M Annual Recurring Revenue">Above ₦100M Annual Recurring Revenue</option>
                   </select>
                 </div>
 
@@ -282,10 +282,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                   <CheckCircle className="w-7 h-7" weight="fill" />
                 </div>
                 <h4 className="font-display font-extrabold text-2xl text-[#0A0F1D]">
-                  Brief Routed to info@sabicoo.com
+                  Thank You! Your Message Has Been Sent
                 </h4>
                 <p className="text-sm text-slate-600 font-semibold max-w-md mx-auto leading-relaxed">
-                  Your scoping brief for <strong className="text-[#0A0F1D]">{form.company}</strong> has been transmitted directly to <span className="text-[#1896FA] font-bold">info@sabicoo.com</span>. Our senior advisory team responds within 24 hours.
+                  We have received your details for <strong className="text-[#0A0F1D]">{form.company}</strong> and sent them to <span className="text-[#1896FA] font-bold">info@sabicoo.com</span>. Our team will get back to you within 24 hours.
                 </p>
                 <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-2.5">
                   {mailtoUrl && (

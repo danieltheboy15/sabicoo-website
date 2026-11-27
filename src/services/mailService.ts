@@ -122,8 +122,8 @@ export const submitToSabiInbox = async (
       return {
         success: true,
         message: shouldCcSender
-          ? `Report dispatched to ${cleanSenderEmail} and ${TARGET_INBOX_EMAIL}.`
-          : `Your response has been sent to ${TARGET_INBOX_EMAIL}.`,
+          ? `Your report has been sent to ${cleanSenderEmail} and ${TARGET_INBOX_EMAIL}.`
+          : `Your message has been sent to ${TARGET_INBOX_EMAIL}.`,
         mailtoFallbackUrl: mailtoFallback
       };
     }
@@ -132,14 +132,14 @@ export const submitToSabiInbox = async (
       success: false,
       message:
         data?.message ||
-        `Direct delivery could not be verified. Please use the email copy link below.`,
+        `We could not confirm delivery right now. Please click the email link below to send a copy.`,
       mailtoFallbackUrl: mailtoFallback
     };
   } catch (err) {
     console.warn(`Direct transmission to ${TARGET_INBOX_EMAIL} encountered a network barrier; falling back to direct email dispatch`, err);
     return {
       success: false,
-      message: `Network issue while dispatching. Use the email copy button below to send directly.`,
+      message: `There was a connection problem while sending. Please use the email button below to send it directly.`,
       mailtoFallbackUrl: mailtoFallback
     };
   }

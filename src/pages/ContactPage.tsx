@@ -15,7 +15,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
     email: '',
     phone: '',
     businessName: '',
-    currentRevenue: '₦10M - ₦50M',
+    currentRevenue: '₦10M - ₦50M Annual Recurring Revenue',
     businessDescription: ''
   });
 
@@ -279,10 +279,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
                       className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm text-[#0A0F1D] focus:outline-none focus:border-[#1896FA] bg-white cursor-pointer"
                     >
                       <option value="Pre-revenue (₦0)">Pre-revenue (₦0)</option>
-                      <option value="₦0 - ₦10M ARR">₦0 - ₦10M ARR</option>
-                      <option value="₦10M - ₦50M ARR">₦10M - ₦50M ARR</option>
-                      <option value="₦50M - ₦100M ARR">₦50M - ₦100M ARR</option>
-                      <option value="Above ₦100M ARR">Above ₦100M ARR</option>
+                      <option value="₦0 - ₦10M Annual Recurring Revenue">₦0 - ₦10M Annual Recurring Revenue</option>
+                      <option value="₦10M - ₦50M Annual Recurring Revenue">₦10M - ₦50M Annual Recurring Revenue</option>
+                      <option value="₦50M - ₦100M Annual Recurring Revenue">₦50M - ₦100M Annual Recurring Revenue</option>
+                      <option value="Above ₦100M Annual Recurring Revenue">Above ₦100M Annual Recurring Revenue</option>
                     </select>
                   </div>
 
@@ -325,10 +325,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ preselectedTrack }) =>
                     <CheckCircle className="w-8 h-8 text-[#1896FA]" weight="fill" />
                   </div>
                   <h3 className="font-display font-bold text-2xl text-[#0A0F1D]">
-                    Inquiry Received
+                    Thank You!
                   </h3>
                   <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed font-semibold">
-                    Thank you, <strong className="text-[#0A0F1D]">{formData.name}</strong>. Your request has been submitted.
+                    Thank you, <strong className="text-[#0A0F1D]">{formData.name}</strong>. Your message has been sent and our team will get back to you within 24 hours.
                   </p>
                   <div className="flex items-center justify-center pt-4">
                     <button
