@@ -1,0 +1,256 @@
+{
+  "entities": {
+    "InsightArticle": {
+      "title": "InsightArticle",
+      "description": "An editorial insight article published or drafted via the Sabi COO /portal CMS.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "URL-safe unique identifier for the article."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 180,
+          "description": "Headline of the article."
+        },
+        "tag": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60,
+          "description": "Category label such as Operator Playbook, Governance & Scale, or Cash & Capital."
+        },
+        "readTime": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 40,
+          "description": "Estimated reading time label."
+        },
+        "date": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Human-readable publication date."
+        },
+        "excerpt": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 500,
+          "description": "Short summary shown on article cards and masthead."
+        },
+        "image": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Cover image URL or bundled asset path."
+        },
+        "author": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Display name of the article author."
+        },
+        "authorRole": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Editorial role or practice title."
+        },
+        "pullQuote": {
+          "type": "string",
+          "maxLength": 400,
+          "description": "Optional featured pull quote."
+        },
+        "keyTakeaways": {
+          "type": "array",
+          "description": "List of actionable takeaway bullet points (up to 10)."
+        },
+        "sections": {
+          "type": "array",
+          "description": "Ordered article content sections containing heading and paragraphs (up to 15)."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["published", "draft"],
+          "description": "Publication state of the article."
+        },
+        "authorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Firebase Auth UID of the creator."
+        },
+        "publishedOrder": {
+          "type": "number",
+          "description": "Numeric timestamp used to sort newest articles first."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "tag",
+        "readTime",
+        "date",
+        "excerpt",
+        "image",
+        "author",
+        "authorRole",
+        "keyTakeaways",
+        "sections",
+        "status",
+        "authorUid",
+        "publishedOrder",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Granted CMS administrator record.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "grantedBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "name", "grantedBy", "createdAt"]
+    },
+    "AuthorizedAuthor": {
+      "title": "AuthorizedAuthor",
+      "description": "Approved CMS contributor authorized to publish and edit articles in /portal.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "role": {
+          "type": "string",
+          "enum": ["author", "editor"]
+        },
+        "approvedBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "name", "role", "approvedBy", "createdAt", "updatedAt"]
+    },
+    "AccessRequest": {
+      "title": "AccessRequest",
+      "description": "Self-service request submitted by a signed-in contributor awaiting approval in /portal.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "roleTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "declined"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "name", "roleTitle", "status", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/insights/{articleId}": {
+      "schema": { "$ref": "#/entities/InsightArticle" },
+      "description": "Publicly readable published insights and author-owned drafts managed through /portal."
+    },
+    "/admins/{uid}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Additional CMS admins granted privileges by a bootstrapped or existing admin."
+    },
+    "/authorized_authors/{uid}": {
+      "schema": { "$ref": "#/entities/AuthorizedAuthor" },
+      "description": "Approved writers and editors permitted to publish and update insights."
+    },
+    "/access_requests/{uid}": {
+      "schema": { "$ref": "#/entities/AccessRequest" },
+      "description": "Pending contributor access requests submitted from /portal."
+    }
+  }
+}

@@ -1,3 +1,10 @@
+import insightBottlenecksImg from '../assets/images/insight_bottlenecks_1795714618250.jpg';
+import insightStructureImg from '../assets/images/insight_business_structure_1795714618389.jpg';
+import insightCashImg from '../assets/images/insight_cash_forecasts_1795714619678.jpg';
+import insightDelegationImg from '../assets/images/insight_delegation_systems_1795714619665.jpg';
+import insightSopImg from '../assets/images/insight_sop_execution_1795714620546.jpg';
+import insightScorecardsImg from '../assets/images/insight_scorecards_metrics_1795714620589.jpg';
+
 export interface ServiceItem {
   id: string;
   number: string;
@@ -43,6 +50,11 @@ export interface TestimonialItem {
   metricLabel: string;
 }
 
+export interface InsightSectionBlock {
+  heading: string;
+  paragraphs: string[];
+}
+
 export interface BlogItem {
   id: string;
   tag: string;
@@ -52,7 +64,13 @@ export interface BlogItem {
   excerpt: string;
   image: string;
   author: string;
+  authorRole: string;
+  pullQuote: string;
+  keyTakeaways: string[];
+  sections: InsightSectionBlock[];
 }
+
+export type InsightItem = BlogItem;
 
 export interface FaqItem {
   question: string;
@@ -439,38 +457,227 @@ export const TESTIMONIALS: TestimonialItem[] = [
   }
 ];
 
-export const BLOG_POSTS: BlogItem[] = [
+export const INSIGHTS_ARTICLES: InsightItem[] = [
   {
     id: "operational-bottlenecks-limit-growth",
     tag: "Operator Playbook",
     title: "Operational Bottlenecks That Quietly Limit Growth",
     readTime: "5 min read",
     date: "October 18, 2026",
-    excerpt: "Most small companies stall not because they lack market demand, but because the founder has unwittingly become the company's biggest structural constraint.",
-    image: "https://cdn.prod.website-files.com/69e85301666fcbb8eabb712b/69e96e8a5238d7b67cbbd82b_Blog%20Image%20(31).webp",
-    author: "Sabi COO Editorial"
+    excerpt: "Most growing companies do not stall because of weak demand—they stall because the founder has unknowingly become the only approval desk in the building.",
+    image: insightBottlenecksImg,
+    author: "Sabi COO Editorial",
+    authorRole: "Operations & Systems Practice",
+    pullQuote: "Growth rarely breaks a product first. It breaks the informal habits that used to hold a five-person team together.",
+    keyTakeaways: [
+      "Identify every recurring decision that pauses when the founder is offline for 48 hours.",
+      "Separate routine daily approvals from high-risk strategic calls using clear financial thresholds.",
+      "Replace WhatsApp firefighting with documented handoffs so frontline managers own delivery."
+    ],
+    sections: [
+      {
+        heading: "Why Demand Alone Stops Working After Year One",
+        paragraphs: [
+          "In the early days of a business, founder involvement is a superpower. You close the biggest deals, fix supplier delays by phone, and personally check every deliverable before it reaches a client. Speed comes directly from your personal stamina.",
+          "As order volume doubles or triples, that exact habit turns into a ceiling. Every invoice, refund, discount request, and staff escalation lands on one desk. Team members stop making judgment calls because waiting for your approval feels safer than getting it wrong."
+        ]
+      },
+      {
+        heading: "Spotting the Hidden Friction Points",
+        paragraphs: [
+          "The clearest sign of an operational bottleneck is rework. When customer orders go out late, stock counts fail to match the ledger, or two staff members repeat the same follow-up call, the company is paying twice for the same revenue.",
+          "Instead of hiring more people into an unorganized process—which simply multiplies confusion—start by mapping the last ten customer complaints from first contact to final payment. Almost every breakdown traces back to an unclear handoff."
+        ]
+      },
+      {
+        heading: "Building Systems That Run Without Heroics",
+        paragraphs: [
+          "Breaking out of daily firefighting does not require complex enterprise software. It starts with simple, agreed decision rules: what a supervisor can approve immediately, how an issue gets escalated within two hours, and which five numbers leadership reviews every Monday morning.",
+          "Once those guardrails are written down and practiced with the team, founders regain dozens of hours each week to focus on partnerships, capital, and market expansion."
+        ]
+      }
+    ]
   },
   {
     id: "choosing-right-business-structure",
     tag: "Governance & Scale",
     title: "Choosing the Right Business Structure: What Founders Need",
-    readTime: "7 min read",
+    readTime: "6 min read",
     date: "October 12, 2026",
-    excerpt: "Why premature executive hiring drains early working capital, and how fractional milestone engagements protect cash runway while enforcing accountability.",
-    image: "https://cdn.prod.website-files.com/69e85301666fcbb8eabb712b/69e96ebc52eac39fdd395250_Blog%20Image%20(30).webp",
-    author: "Jaylon Culhane"
+    excerpt: "Why hiring senior executives too early drains working capital, and how clear role architecture protects cash runway while building real accountability.",
+    image: insightStructureImg,
+    author: "Tobi Adeyemi",
+    authorRole: "Managing Partner, Sabi COO",
+    pullQuote: "A senior title cannot fix an undefined seat. Build the operating structure first, then place the right leader inside it.",
+    keyTakeaways: [
+      "Avoid hiring expensive full-time executives before core workflows and metrics exist.",
+      "Give every role three clear outcomes and one primary owner—never shared accountability.",
+      "Match your leadership structure to your current revenue stage rather than an idealized org chart."
+    ],
+    sections: [
+      {
+        heading: "The Cost of Premature Executive Hiring",
+        paragraphs: [
+          "When daily operations start feeling overwhelming, many founders look for a silver bullet: hiring a full-time Operations Director or Chief Operating Officer. On paper, handing off the stress sounds ideal.",
+          "In practice, dropping a high-salary executive into a company with no written procedures, fragmented bookkeeping, and unclear reporting lines creates frustration on both sides. The new hire spends months asking basic questions while payroll rises sharply."
+        ]
+      },
+      {
+        heading: "Designing Roles Around Outcomes, Not Titles",
+        paragraphs: [
+          "An effective organizational chart is a map of responsibility, not a status ladder. Before creating or filling any management role, write down the exact three outcomes that seat owns every week—such as on-time dispatch rate, days-to-collect invoices, or client onboarding speed.",
+          "When two people share responsibility for the same target, accountability disappears. Single ownership forces clarity around tools, authority, and weekly review."
+        ]
+      },
+      {
+        heading: "Structuring for Your Current Growth Stage",
+        paragraphs: [
+          "Early-stage and mid-sized companies benefit most from milestone-driven operational builds: getting the playbook, dashboards, and manager habits right first, then promoting or hiring into a clean system that runs reliably from day one."
+        ]
+      }
+    ]
   },
   {
-    id: "how-strategic-advisors-scale-faster",
+    id: "from-13-week-cash-forecasts-to-autonomous-teams",
     tag: "Cash & Capital",
     title: "From 13-Week Cash Forecasts to Autonomous Teams",
     readTime: "6 min read",
     date: "September 29, 2026",
-    excerpt: "A tactical guide to escaping end-of-month payroll anxiety and designing financial governance that board members and bank lenders respect.",
-    image: "https://cdn.prod.website-files.com/69e85301666fcbb8eabb712b/69e96ee090768b6046cf2335_Blog%20Image%20(29).webp",
-    author: "Brandon Bergson"
+    excerpt: "A practical guide to escaping end-of-month payroll anxiety and putting forward cash visibility at the center of daily operational decisions.",
+    image: insightCashImg,
+    author: "Chidi Nwosu",
+    authorRole: "Lead Financial & Operations Architect",
+    pullQuote: "Revenue is a vanity milestone if cash arrives forty days after payroll and suppliers are due.",
+    keyTakeaways: [
+      "Track weekly expected inflows and committed outflows 13 weeks ahead in one simple view.",
+      "Tie milestone invoicing directly to delivery checkpoints so receivables never drift.",
+      "Review cash gaps alongside operational delays—billing lags are almost always operational."
+    ],
+    sections: [
+      {
+        heading: "Why Profitable Companies Still Run Out of Cash",
+        paragraphs: [
+          "It is surprisingly common for a growing business to post strong monthly sales yet face intense stress in the final week of the month. The culprit is rarely sales volume—it is timing.",
+          "When invoices are issued late after project completion, customer credit terms go unmonitored, and supplier prepayments are approved informally, working capital gets trapped inside unfinished workflows."
+        ]
+      },
+      {
+        heading: "How a Rolling 13-Week Cash View Changes Behavior",
+        paragraphs: [
+          "Looking only at today's bank app tells you where you stood yesterday. A rolling 13-week cash forecast projects every confirmed receivable, recurring fixed cost, tax obligation, and inventory commitment across the next quarter.",
+          "With a three-month radar in front of leadership every week, hiring decisions, vendor negotiations, and collection follow-ups become calm and deliberate instead of reactive."
+        ]
+      },
+      {
+        heading: "Linking Cash Discipline to Daily Operations",
+        paragraphs: [
+          "Billing speed is an operational habit. When account managers know an invoice triggers automatically at milestone sign-off—and collections follow a polite, scheduled cadence—cash flow stabilizes without awkward founder calls."
+        ]
+      }
+    ]
+  },
+  {
+    id: "step-out-of-firefighting-without-losing-control",
+    tag: "Leadership",
+    title: "How Founders Step Out of Firefighting Without Losing Control",
+    readTime: "5 min read",
+    date: "September 14, 2026",
+    excerpt: "Stepping back does not mean stepping blindly. Discover how simple operating rhythms let founders maintain full visibility while empowering managers.",
+    image: insightDelegationImg,
+    author: "Amaka Okafor",
+    authorRole: "Senior Operator & People Lead",
+    pullQuote: "Delegation fails when founders hand over tasks without handing over clear standards and a weekly feedback loop.",
+    keyTakeaways: [
+      "Delegate complete workflows with clear 'done' criteria rather than piecemeal errands.",
+      "Replace random status interruptions with one structured 30-minute weekly leadership check-in.",
+      "Use exception-based reporting so you hear about risks early instead of after a client complains."
+    ],
+    sections: [
+      {
+        heading: "Why 'Letting Go' Usually Backfires First",
+        paragraphs: [
+          "Many founders try delegating once, watch a mistake happen with a key customer, and immediately pull all the work back onto their own plate. The conclusion feels obvious: 'Nobody does it like I do.'",
+          "In reality, the failure happened because the staff member received the task without the context, quality checklist, or authority needed to finish it well."
+        ]
+      },
+      {
+        heading: "Visibility Without Micromanagement",
+        paragraphs: [
+          "True operational control comes from cadence, not constant interruptions. When every team lead reports their core numbers and red flags in a crisp weekly summary, founders see problems days earlier while spending far less time in group chats.",
+          "Your role shifts from solving every problem yourself to coaching your managers on how to resolve issues within agreed boundaries."
+        ]
+      }
+    ]
+  },
+  {
+    id: "why-sops-fail-and-how-to-make-them-stick",
+    tag: "Systems & SOPs",
+    title: "Why SOPs Fail in Most Companies (And How to Make Them Stick)",
+    readTime: "4 min read",
+    date: "August 28, 2026",
+    excerpt: "Thick binders and forgotten cloud folders never improve execution. Here is how to build simple, practical operating guides your team actually uses.",
+    image: insightSopImg,
+    author: "Sabi COO Editorial",
+    authorRole: "Operations & Systems Practice",
+    pullQuote: "If an operating guide takes twenty minutes to read during a busy shift, your staff will ignore it within a week.",
+    keyTakeaways: [
+      "Write checklists alongside the frontline staff who actually perform the work every day.",
+      "Keep every critical procedure to one clear page or a short 2-minute walkthrough.",
+      "Embed checklists inside daily tools and review compliance during onboarding and handoffs."
+    ],
+    sections: [
+      {
+        heading: "The Graveyard of Unused Documents",
+        paragraphs: [
+          "Almost every scaling company has tried writing Standard Operating Procedures at least once. Someone spends two weekends typing long paragraphs into a shared drive, sends out an announcement, and within a month nobody opens the folder again.",
+          "Documents written from the top down often miss the real edge cases frontline staff face—broken supplier links, missing client details, or last-minute dispatch changes."
+        ]
+      },
+      {
+        heading: "Designing Guides Built for Real Workdays",
+        paragraphs: [
+          "Working SOPs read like pre-flight checklists: short, numbered steps written in plain language directly at the point of execution. Whether it is onboarding a new client, closing daily warehouse stock, or reconciling payments, clarity beats length every time.",
+          "When staff help refine the checklist during live training, adoption happens naturally—and new hires get up to speed in days rather than months."
+        ]
+      }
+    ]
+  },
+  {
+    id: "five-weekly-numbers-every-owner-needs",
+    tag: "Cash & Capital",
+    title: "The 5 Weekly Numbers Every Business Owner Needs on Monday",
+    readTime: "5 min read",
+    date: "August 11, 2026",
+    excerpt: "Waiting for quarterly accounting statements leaves you driving in the rearview mirror. Track these five operational metrics every Monday morning.",
+    image: insightScorecardsImg,
+    author: "Chidi Nwosu",
+    authorRole: "Lead Financial & Operations Architect",
+    pullQuote: "You do not need forty charts on a screen. Five honest weekly numbers tell you whether your business is healthy or drifting.",
+    keyTakeaways: [
+      "Pair lagging financial totals with leading operational indicators like pipeline and fulfillment SLA.",
+      "Track net cash collected alongside revenue booked so collections never quietly fall behind.",
+      "Assign one named owner to update and explain each number before Monday's leadership review."
+    ],
+    sections: [
+      {
+        heading: "Why Monthly Accounting Arrives Too Late",
+        paragraphs: [
+          "Traditional financial statements are essential for tax and governance, yet they often land three weeks after a month closes. By the time a margin dip appears on a profit-and-loss sheet, six weeks of operational leakage may have already passed.",
+          "Operators need a concise weekly scorecard—five numbers that take ten minutes to review and give an honest pulse check on sales, delivery, cash, and team capacity."
+        ]
+      },
+      {
+        heading: "The Monday Morning Five",
+        paragraphs: [
+          "Every company varies slightly, yet five categories consistently keep founders grounded: (1) Qualified new pipeline added, (2) Cash collected vs. invoiced, (3) On-time delivery or fulfillment rate, (4) Open customer escalations or rework count, and (5) Projected cash balance over the next four weeks.",
+          "When those five figures live in one tidy scorecard owned by your department leads, surprises shrink dramatically and strategic planning becomes effortless."
+        ]
+      }
+    ]
   }
 ];
+
+export const BLOG_POSTS: BlogItem[] = INSIGHTS_ARTICLES;
 
 export const FAQS: FaqItem[] = [
   {

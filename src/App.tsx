@@ -4,6 +4,7 @@ import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { ComparisonSection } from './components/ComparisonSection';
 import { HowItWorksSection } from './components/HowItWorksSection';
+import { InsightsSection } from './components/InsightsSection';
 import { FaqSection } from './components/FaqSection';
 import { HomeCtaSection } from './components/HomeCtaSection';
 import { Footer } from './components/Footer';
@@ -12,16 +13,40 @@ import { ContactModal } from './components/ContactModal';
 import { ServicesPage } from './pages/ServicesPage';
 import { ExtraordinaryPage } from './pages/ExtraordinaryPage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
+import { InsightsPage } from './pages/InsightsPage';
 import { ContactPage } from './pages/ContactPage';
+import { PortalPage } from './pages/PortalPage';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { INSIGHTS_ARTICLES, InsightItem } from './data/sabiData';
+import { subscribePublishedInsights } from './services/insightsService';
 import { ArrowUpRight } from 'iconoir-react';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<string>('home');
   const [servicesTab, setServicesTab] = useState<'tier-1' | 'tier-2'>('tier-1');
-  const [showPreloader, setShowPreloader] = useState(true);
+  const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
+  const [publishedArticles, setPublishedArticles] = useState<InsightItem[]>(INSIGHTS_ARTICLES);
+  const [showPreloader, setShowPreloader] = useState(() => {
+    const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+    const pageParam = new URLSearchParams(window.location.search).get('page');
+    return path !== 'portal' && pageParam !== 'portal';
+  });
   const [screenerOpen, setScreenerOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [selectedTrackForContact, setSelectedTrackForContact] = useState<string>('');
+
+  // Live subscription to published Insight from SabiCoo articles in Firestore
+  useEffect(() => {
+    const unsubscribe = subscribePublishedInsights(
+      (articles) => {
+        setPublishedArticles(articles);
+      },
+      (error) => {
+        console.warn('Using starter insight articles:', error);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
   // Auto-popup 60s Screener 7 seconds after the home page has loaded and preloader cleared
   useEffect(() => {
@@ -46,8 +71,9 @@ export default function App() {
       const searchParams = new URLSearchParams(window.location.search);
       const searchParam = searchParams.get('page');
       const tabParam = searchParams.get('tab');
+      const articleParam = searchParams.get('article');
       const hash = window.location.hash;
-      const validPages = ['home', 'services', 'extraordinary', 'how-it-works', 'contact'];
+      const validPages = ['home', 'services', 'extraordinary', 'how-it-works', 'insights', 'contact', 'portal'];
 
       let page = 'home';
       if (searchParam && validPages.includes(searchParam)) {
@@ -61,17 +87,19 @@ export default function App() {
         tab = 'tier-2';
       }
 
-      return { page, tab };
+      return { page, tab, article: page === 'insights' ? articleParam : null };
     };
 
-    const { page, tab } = getInitialState();
+    const { page, tab, article } = getInitialState();
     setCurrentPage(page);
     setServicesTab(tab);
+    setSelectedArticleId(article);
 
     const handlePopState = () => {
       const state = getInitialState();
       setCurrentPage(state.page);
       setServicesTab(state.tab);
+      setSelectedArticleId(state.article);
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
       if (document.documentElement) document.documentElement.scrollTop = 0;
       if (document.body) document.body.scrollTop = 0;
@@ -81,7 +109,7 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Ensure scroll position resets to the top whenever the page or service tab changes
+  // Ensure scroll position resets to the top whenever the page, service tab, or active article changes
   useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -113,21 +141,30 @@ export default function App() {
       cancelAnimationFrame(rafId);
       clearTimeout(timer);
     };
-  }, [currentPage, servicesTab]);
+  }, [currentPage, servicesTab, selectedArticleId]);
 
-  const handleNavigate = (page: string, tab?: 'tier-1' | 'tier-2') => {
-    const isSamePage = page === currentPage && (!tab || tab === servicesTab);
+  const handleNavigate = (page: string, tab?: 'tier-1' | 'tier-2', articleId?: string | null) => {
+    const normalizedArticle = page === 'insights' ? (articleId ?? null) : null;
+    const isSamePage =
+      page === currentPage &&
+      (!tab || tab === servicesTab) &&
+      normalizedArticle === selectedArticleId;
 
     setCurrentPage(page);
     if (page === 'services') {
       setServicesTab(tab || 'tier-1');
     }
+    setSelectedArticleId(normalizedArticle);
+
     try {
-      let url = page === 'home' ? '/' : `/?page=${page}`;
+      let url = page === 'home' ? '/' : page === 'portal' ? '/portal' : `/?page=${page}`;
       if (page === 'services' && tab) {
         url += `&tab=${tab}`;
       }
-      window.history.pushState({ page, tab }, '', url);
+      if (page === 'insights' && normalizedArticle) {
+        url += `&article=${encodeURIComponent(normalizedArticle)}`;
+      }
+      window.history.pushState({ page, tab, article: normalizedArticle }, '', url);
     } catch {
       // Fallback if pushState fails
     }
@@ -141,6 +178,10 @@ export default function App() {
       if (document.documentElement) document.documentElement.scrollTop = 0;
       if (document.body) document.body.scrollTop = 0;
     }
+  };
+
+  const handleSelectArticle = (articleId: string | null) => {
+    handleNavigate('insights', undefined, articleId);
   };
 
   const handleSelectTrack = (track: string) => {
@@ -199,6 +240,13 @@ export default function App() {
                 onOpenScreener={handleOpenScreener}
               />
 
+              {/* Insight from SabiCoo - Featured 3 Articles */}
+              <InsightsSection
+                articles={publishedArticles}
+                onSelectArticle={(articleId) => handleSelectArticle(articleId)}
+                onViewAllArticles={() => handleNavigate('insights')}
+              />
+
               {/* Home Page Discovery Call Pre-Footer CTA */}
               <HomeCtaSection
                 onOpenContact={() => handleNavigate('contact')}
@@ -229,10 +277,26 @@ export default function App() {
           />
         )}
 
+        {currentPage === 'insights' && (
+          <InsightsPage
+            articles={publishedArticles}
+            selectedArticleId={selectedArticleId}
+            onSelectArticle={handleSelectArticle}
+            onNavigate={handleNavigate}
+            onOpenScreener={handleOpenScreener}
+          />
+        )}
+
         {currentPage === 'contact' && (
           <ContactPage
             preselectedTrack={selectedTrackForContact}
           />
+        )}
+
+        {currentPage === 'portal' && (
+          <ErrorBoundary onReset={() => handleNavigate('portal')}>
+            <PortalPage onNavigate={handleNavigate} />
+          </ErrorBoundary>
         )}
       </main>
 
@@ -258,15 +322,17 @@ export default function App() {
       />
 
       {/* Floating Screener Trigger for quick access */}
-      <div className="fixed bottom-6 right-6 z-40 hidden sm:block">
-        <button
-          onClick={handleOpenScreener}
-          className="group flex items-center gap-2 px-4 py-2.5 bg-[#021347] text-white rounded-full border border-[#1896FA]/40 hover:border-[#1896FA] transition-all duration-300 cursor-pointer text-xs font-semibold shadow-xl shadow-blue-900/20 hover:bg-[#010C2E]"
-        >
-          <span>60s Screener</span>
-          <ArrowUpRight className="w-3.5 h-3.5 text-white/50 group-hover:text-white" />
-        </button>
-      </div>
+      {currentPage !== 'portal' && (
+        <div className="fixed bottom-6 right-6 z-40 hidden sm:block">
+          <button
+            onClick={handleOpenScreener}
+            className="group flex items-center gap-2 px-4 py-2.5 bg-[#021347] text-white rounded-full border border-[#1896FA]/40 hover:border-[#1896FA] transition-all duration-300 cursor-pointer text-xs font-semibold shadow-xl shadow-blue-900/20 hover:bg-[#010C2E]"
+          >
+            <span>60s Screener</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-white/50 group-hover:text-white" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

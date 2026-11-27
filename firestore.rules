@@ -1,0 +1,298 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ==================== AUTH & ROLE HELPERS ====================
+
+    function isPortalAccount() {
+      return request.auth != null
+        && request.auth.token.email == 'sabicooeditorial@sabicoo.com'
+        && request.auth.token.firebase.sign_in_provider == 'password';
+    }
+
+    function isSignedIn() {
+      return request.auth != null
+        && (request.auth.token.email_verified == true || isPortalAccount());
+    }
+
+    function isBootstrappedAdmin() {
+      return isPortalAccount()
+        || (request.auth != null
+            && request.auth.token.email_verified == true
+            && (request.auth.token.email == 'fatunsed@gmail.com'
+                || request.auth.token.email == 'info@sabicoo.com'));
+    }
+
+    function isAdmin() {
+      return isBootstrappedAdmin()
+        || (isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    function isAuthorizedAuthor() {
+      return isAdmin()
+        || (isSignedIn() && exists(/databases/$(database)/documents/authorized_authors/$(request.auth.uid)));
+    }
+
+    function isValidId(id) {
+      return id is string
+        && id.size() >= 2
+        && id.size() <= 128
+        && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidUid(uid) {
+      return uid is string
+        && uid.size() >= 1
+        && uid.size() <= 128
+        && uid.matches('^[a-zA-Z0-9_\\-:.]+$');
+    }
+
+    // ==================== SCHEMA VALIDATORS ====================
+
+    function isValidInsightSections(sections) {
+      return sections is list
+        && sections.size() >= 1
+        && sections.size() <= 15
+        && sections[0] is map
+        && sections[0].keys().hasOnly(['heading', 'paragraphs'])
+        && sections[0].keys().hasAll(['heading', 'paragraphs'])
+        && sections[0].heading is string
+        && sections[0].heading.size() >= 1
+        && sections[0].heading.size() <= 160
+        && sections[0].paragraphs is list
+        && sections[0].paragraphs.size() >= 1
+        && sections[0].paragraphs.size() <= 20
+        && sections[0].paragraphs[0] is string
+        && sections[0].paragraphs[0].size() >= 1
+        && sections[0].paragraphs[0].size() <= 5000;
+    }
+
+    function isValidInsightPayload(data, articleId) {
+      return data.keys().hasAll([
+          'id', 'title', 'tag', 'readTime', 'date', 'excerpt', 'image',
+          'author', 'authorRole', 'pullQuote', 'keyTakeaways', 'sections',
+          'status', 'authorUid', 'publishedOrder', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'title', 'tag', 'readTime', 'date', 'excerpt', 'image',
+          'author', 'authorRole', 'pullQuote', 'keyTakeaways', 'sections',
+          'status', 'authorUid', 'publishedOrder', 'createdAt', 'updatedAt'
+        ])
+        && data.id is string
+        && data.id == articleId
+        && isValidId(data.id)
+        && data.title is string
+        && data.title.size() >= 3
+        && data.title.size() <= 180
+        && data.tag is string
+        && data.tag.size() >= 2
+        && data.tag.size() <= 60
+        && data.readTime is string
+        && data.readTime.size() >= 2
+        && data.readTime.size() <= 40
+        && data.date is string
+        && data.date.size() >= 3
+        && data.date.size() <= 40
+        && data.excerpt is string
+        && data.excerpt.size() >= 10
+        && data.excerpt.size() <= 500
+        && data.image is string
+        && data.image.size() >= 1
+        && data.image.size() <= 1000
+        && data.author is string
+        && data.author.size() >= 2
+        && data.author.size() <= 100
+        && data.authorRole is string
+        && data.authorRole.size() >= 2
+        && data.authorRole.size() <= 100
+        && data.pullQuote is string
+        && data.pullQuote.size() <= 400
+        && data.keyTakeaways is list
+        && data.keyTakeaways.size() <= 10
+        && (data.keyTakeaways.size() == 0
+            || (data.keyTakeaways[0] is string && data.keyTakeaways[0].size() <= 300))
+        && isValidInsightSections(data.sections)
+        && data.status in ['published', 'draft']
+        && data.authorUid is string
+        && data.authorUid.size() >= 1
+        && data.authorUid.size() <= 128
+        && data.publishedOrder is number
+        && data.publishedOrder > 0;
+    }
+
+    function isValidAdminUser(data, uid) {
+      return data.keys().hasAll(['uid', 'email', 'name', 'grantedBy', 'createdAt'])
+        && data.keys().hasOnly(['uid', 'email', 'name', 'grantedBy', 'createdAt'])
+        && data.uid is string
+        && data.uid == uid
+        && isValidUid(data.uid)
+        && data.email is string
+        && data.email.size() >= 3
+        && data.email.size() <= 200
+        && data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 120
+        && data.grantedBy is string
+        && data.grantedBy == request.auth.uid
+        && data.grantedBy.size() <= 128
+        && data.createdAt == request.time;
+    }
+
+    function isValidAuthorizedAuthorCreate(data, uid) {
+      return data.keys().hasAll(['uid', 'email', 'name', 'role', 'approvedBy', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'email', 'name', 'role', 'approvedBy', 'createdAt', 'updatedAt'])
+        && data.uid is string
+        && data.uid == uid
+        && isValidUid(data.uid)
+        && data.email is string
+        && data.email.size() >= 3
+        && data.email.size() <= 200
+        && data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 120
+        && data.role in ['author', 'editor']
+        && data.approvedBy is string
+        && data.approvedBy == request.auth.uid
+        && data.approvedBy.size() <= 128
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    function isValidAuthorizedAuthorUpdate(data, existing, uid) {
+      return data.keys().hasAll(['uid', 'email', 'name', 'role', 'approvedBy', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'email', 'name', 'role', 'approvedBy', 'createdAt', 'updatedAt'])
+        && data.uid == uid
+        && data.uid == existing.uid
+        && data.email is string
+        && data.email.size() >= 3
+        && data.email.size() <= 200
+        && data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 120
+        && data.role in ['author', 'editor']
+        && data.approvedBy is string
+        && data.approvedBy.size() >= 1
+        && data.approvedBy.size() <= 128
+        && data.createdAt == existing.createdAt
+        && data.updatedAt == request.time;
+    }
+
+    function isValidAccessRequestCreate(data, uid) {
+      return data.keys().hasAll(['uid', 'email', 'name', 'roleTitle', 'note', 'status', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'email', 'name', 'roleTitle', 'note', 'status', 'createdAt', 'updatedAt'])
+        && data.uid is string
+        && data.uid == uid
+        && data.uid == request.auth.uid
+        && data.email is string
+        && data.email == request.auth.token.email
+        && data.email.size() >= 3
+        && data.email.size() <= 200
+        && data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 120
+        && data.roleTitle is string
+        && data.roleTitle.size() >= 1
+        && data.roleTitle.size() <= 100
+        && data.note is string
+        && data.note.size() <= 300
+        && data.status == 'pending'
+        && data.createdAt == request.time
+        && data.updatedAt == request.time;
+    }
+
+    function isValidAccessRequestUpdate(data, existing, uid) {
+      return data.keys().hasAll(['uid', 'email', 'name', 'roleTitle', 'note', 'status', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'email', 'name', 'roleTitle', 'note', 'status', 'createdAt', 'updatedAt'])
+        && data.uid == uid
+        && data.uid == existing.uid
+        && data.email == existing.email
+        && data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 120
+        && data.roleTitle is string
+        && data.roleTitle.size() >= 1
+        && data.roleTitle.size() <= 100
+        && data.note is string
+        && data.note.size() <= 300
+        && data.status in ['pending', 'approved', 'declined']
+        && data.createdAt == existing.createdAt
+        && data.updatedAt == request.time;
+    }
+
+    // ==================== COLLECTIONS ====================
+
+    match /insights/{articleId} {
+      allow get: if isValidId(articleId)
+        && (resource.data.status == 'published'
+            || (isSignedIn() && resource.data.authorUid == request.auth.uid)
+            || isAdmin());
+
+      allow list: if resource.data.status == 'published'
+        || (isSignedIn() && resource.data.authorUid == request.auth.uid)
+        || isBootstrappedAdmin();
+
+      allow create: if isValidId(articleId)
+        && isAuthorizedAuthor()
+        && isValidInsightPayload(request.resource.data, articleId)
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+
+      allow update: if isValidId(articleId)
+        && (isAdmin() || (isAuthorizedAuthor() && resource.data.authorUid == request.auth.uid))
+        && isValidInsightPayload(request.resource.data, articleId)
+        && request.resource.data.authorUid == resource.data.authorUid
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt == request.time;
+
+      allow delete: if isValidId(articleId)
+        && (isAdmin() || (isAuthorizedAuthor() && resource.data.authorUid == request.auth.uid));
+    }
+
+    match /admins/{uid} {
+      allow get: if isValidUid(uid)
+        && ((isSignedIn() && request.auth.uid == uid) || isAdmin());
+      allow list: if isBootstrappedAdmin();
+      allow create: if isValidUid(uid)
+        && isAdmin()
+        && isValidAdminUser(request.resource.data, uid);
+      allow update: if false;
+      allow delete: if isValidUid(uid)
+        && isAdmin()
+        && uid != request.auth.uid;
+    }
+
+    match /authorized_authors/{uid} {
+      allow get: if isValidUid(uid)
+        && ((isSignedIn() && request.auth.uid == uid) || isAdmin());
+      allow list: if isBootstrappedAdmin();
+      allow create: if isValidUid(uid)
+        && isAdmin()
+        && isValidAuthorizedAuthorCreate(request.resource.data, uid);
+      allow update: if isValidUid(uid)
+        && isAdmin()
+        && isValidAuthorizedAuthorUpdate(request.resource.data, resource.data, uid);
+      allow delete: if isValidUid(uid) && isAdmin();
+    }
+
+    match /access_requests/{uid} {
+      allow get: if isValidUid(uid)
+        && ((isSignedIn() && request.auth.uid == uid) || isAdmin());
+      allow list: if isBootstrappedAdmin();
+      allow create: if isValidUid(uid)
+        && isSignedIn()
+        && request.auth.uid == uid
+        && isValidAccessRequestCreate(request.resource.data, uid);
+      allow update: if isValidUid(uid)
+        && isAdmin()
+        && isValidAccessRequestUpdate(request.resource.data, resource.data, uid);
+      allow delete: if isValidUid(uid)
+        && (isAdmin() || (isSignedIn() && request.auth.uid == uid));
+    }
+  }
+}

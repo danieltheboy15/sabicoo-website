@@ -52,7 +52,15 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- 07. Diagnostic Booking & Direct Inquiry -->
+  <!-- 07. Insight from SabiCoo (Insights Archive) -->
+  <url>
+    <loc>https://sabicoo.com/insights</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 08. Diagnostic Booking & Direct Inquiry -->
   <url>
     <loc>https://sabicoo.com/contact</loc>
     <lastmod>2026-11-05</lastmod>

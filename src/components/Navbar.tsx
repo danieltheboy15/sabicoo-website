@@ -20,7 +20,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'home', label: 'Home' },
     { id: 'services', label: 'Services' },
     { id: 'extraordinary', label: 'Extraordinary Engagements' },
-    { id: 'how-it-works', label: 'How It Works' }
+    { id: 'how-it-works', label: 'How It Works' },
+    { id: 'insights', label: 'Insights' }
   ];
 
   const handleNavClick = (pageId: string) => {
@@ -31,10 +32,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full px-3 sm:px-6 md:px-8 pt-3 sm:pt-4 pb-2 transition-all duration-300 pointer-events-none">
       {/* Floating Capsule Bar with deep navy #010926 background and high opacity for crisp logo contrast */}
-      <div className="max-w-[73rem] mx-auto w-full bg-[#010926]/96 backdrop-blur-xl rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.15)] border border-white/20 pointer-events-auto transition-all duration-200">
+      <div className="max-w-[78rem] mx-auto w-full bg-[#010926]/96 backdrop-blur-xl rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_0_0_1px_rgba(255,255,255,0.15)] border border-white/20 pointer-events-auto transition-all duration-200">
         
         {/* Brand Logo - Left (White in logo is 100% visible on #010926 deep navy) */}
-        <div className="flex items-center">
+        <div className="flex items-center shrink-0">
           <button
             onClick={() => handleNavClick('home')}
             className="text-left cursor-pointer focus:outline-none rounded-lg p-0.5 transition-opacity hover:opacity-90 block"
@@ -52,15 +53,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </div>
 
-        {/* Desktop Nav Links - Center (Exact Previous Content) */}
-        <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2">
+        {/* Desktop Nav Links - Center */}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5">
           {navItems.map((item) => {
             const isActive = currentPage === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold tracking-tight transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                className={`px-3 xl:px-4 py-2 rounded-full text-sm font-semibold tracking-tight transition-all duration-200 cursor-pointer whitespace-nowrap shrink-0 ${
                   isActive
                     ? 'text-[#010926] bg-white font-bold shadow-sm'
                     : 'text-white/85 hover:text-white hover:bg-white/15'

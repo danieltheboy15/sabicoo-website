@@ -220,6 +220,11 @@ export const Footer: React.FC<FooterProps> = ({
                     How It Works
                   </button>
                 </li>
+                <li>
+                  <button onClick={() => onNavigatePage('insights')} className="hover:text-[#1896FA] transition-colors cursor-pointer text-left">
+                    Insights
+                  </button>
+                </li>
               </ul>
             </div>
 
@@ -254,12 +259,12 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
               <ul className="space-y-1.5 sm:space-y-2.5 text-xs sm:text-sm text-white font-bold">
                 <li>
-                  <button onClick={onOpenScreener} className="hover:text-blue-300 transition-colors cursor-pointer text-[#1896FA] font-extrabold text-left">
+                  <button onClick={onOpenScreener} className="hover:text-[#1896FA] transition-colors cursor-pointer text-left">
                     <span>60s Screener</span>
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => onNavigatePage('contact')} className="hover:text-blue-300 transition-colors cursor-pointer text-left">
+                  <button onClick={() => onNavigatePage('contact')} className="hover:text-[#1896FA] transition-colors cursor-pointer text-left">
                     Contact Sabi COO
                   </button>
                 </li>
